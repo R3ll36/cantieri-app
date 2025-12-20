@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -130,8 +130,14 @@ export default function MapView({
               click: () => handleMarkerClick(cantiere),
             }}
           >
+            {/* Tooltip sempre visibile con nome cantiere */}
+            <Tooltip permanent direction="top" offset={[0, -40]} className="cantiere-tooltip">
+              <span style={{ fontSize: '11px', fontWeight: '600' }}>{cantiere.nome}</span>
+            </Tooltip>
+
+            {/* Popup con dettagli completi (hover desktop / tap mobile) */}
             <Popup>
-              <div className="p-2 min-w-[200px]">
+              <div className="p-2 min-w-[200px] max-w-[300px]">
                 <h3 className="font-bold text-lg mb-1">{cantiere.nome}</h3>
                 <p className="text-sm text-gray-600 mb-2">{cantiere.indirizzo}</p>
 
@@ -175,6 +181,33 @@ export default function MapView({
                     <div className="flex items-center gap-2">
                       <span className="font-semibold">Orari:</span>
                       <span>{cantiere.orari}</span>
+                    </div>
+                  )}
+
+                  {cantiere.coordinatore_nome && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Coordinatore:</span>
+                      <span>{cantiere.coordinatore_nome}</span>
+                    </div>
+                  )}
+
+                  {cantiere.coordinatore_telefono && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Telefono:</span>
+                      <a
+                        href={`tel:${cantiere.coordinatore_telefono}`}
+                        className="text-blue-600 hover:underline font-medium"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {cantiere.coordinatore_telefono}
+                      </a>
+                    </div>
+                  )}
+
+                  {cantiere.created_by && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Pubblicato da:</span>
+                      <span className="text-gray-700">{cantiere.created_by}</span>
                     </div>
                   )}
                 </div>
