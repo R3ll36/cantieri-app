@@ -16,15 +16,24 @@ export default function Header({ user, onLogout, view, setView }) {
   };
 
   return (
-    <header className="bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-lg sticky top-0 z-[1001]">
+    <header className="bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-lg sticky top-0 z-[1001]">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo General Beton e Titolo */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-1.5 shadow-md">
-              {/* Logo General Beton stilizzato */}
-              <div className="w-full h-full bg-gradient-to-br from-red-600 to-red-700 rounded-md flex items-center justify-center">
-                <span className="text-white font-black text-lg" style={{ fontFamily: 'Arial Black, sans-serif' }}>GB</span>
+            <div className="w-16 h-12 bg-white rounded-lg flex items-center justify-center px-2 shadow-md">
+              {/* Logo General Beton - ellisse rossa con testo */}
+              <div className="relative w-full h-full flex items-center justify-center">
+                <svg viewBox="0 0 120 50" className="w-full h-full">
+                  {/* Ellisse rossa */}
+                  <ellipse cx="60" cy="25" rx="58" ry="23" fill="#C41E3A" />
+                  {/* Rettangolo bianco centrale */}
+                  <rect x="28" y="10" width="64" height="30" fill="white" rx="15" />
+                  {/* Testo "general beton" */}
+                  <text x="60" y="30" fontFamily="Arial Black, sans-serif" fontSize="10" fontWeight="900" fill="#000" textAnchor="middle">
+                    general beton
+                  </text>
+                </svg>
               </div>
             </div>
             <div>
@@ -40,8 +49,8 @@ export default function Header({ user, onLogout, view, setView }) {
               onClick={() => setView('list')}
               className={`px-4 py-2 rounded-lg transition font-semibold ${
                 view === 'list'
-                  ? 'bg-white text-primary-600'
-                  : 'hover:bg-primary-600'
+                  ? 'bg-white text-blue-600'
+                  : 'hover:bg-blue-700'
               }`}
             >
               📋 Lista
@@ -50,8 +59,8 @@ export default function Header({ user, onLogout, view, setView }) {
               onClick={() => setView('map')}
               className={`px-4 py-2 rounded-lg transition font-semibold ${
                 view === 'map'
-                  ? 'bg-white text-primary-600'
-                  : 'hover:bg-primary-600'
+                  ? 'bg-white text-blue-600'
+                  : 'hover:bg-blue-700'
               }`}
             >
               🗺️ Mappa
@@ -61,8 +70,8 @@ export default function Header({ user, onLogout, view, setView }) {
                 onClick={() => setView('add')}
                 className={`px-4 py-2 rounded-lg transition font-semibold ${
                   view === 'add'
-                    ? 'bg-white text-primary-600'
-                    : 'hover:bg-primary-600'
+                    ? 'bg-white text-blue-600'
+                    : 'hover:bg-blue-700'
                 }`}
               >
                 ➕ Aggiungi
@@ -85,20 +94,20 @@ export default function Header({ user, onLogout, view, setView }) {
             </div>
           </nav>
 
-          {/* Mobile Hamburger Button (only < 640px) */}
+          {/* Mobile Hamburger Button (only mobile, not tablet/desktop) */}
           <button
             onClick={toggleMobileMenu}
-            className="sm:hidden p-2 hover:bg-primary-600 rounded-lg transition"
+            className="sm:hidden p-2 bg-white hover:bg-gray-100 rounded-lg transition shadow-md"
             aria-label="Menu"
           >
             {mobileMenuOpen ? (
-              // X icon
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              // X icon (nero)
+              <svg className="w-6 h-6" fill="none" stroke="#000" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              // Hamburger icon (3 lines)
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              // Hamburger icon (3 linee nere)
+              <svg className="w-6 h-6" fill="none" stroke="#000" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
@@ -113,8 +122,8 @@ export default function Header({ user, onLogout, view, setView }) {
                 onClick={() => handleNavigation('list')}
                 className={`px-4 py-3 rounded-lg transition font-semibold text-left ${
                   view === 'list'
-                    ? 'bg-white text-primary-600'
-                    : 'bg-primary-600 hover:bg-primary-700'
+                    ? 'bg-white text-blue-600'
+                    : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
                 📋 Lista Cantieri
@@ -123,8 +132,8 @@ export default function Header({ user, onLogout, view, setView }) {
                 onClick={() => handleNavigation('map')}
                 className={`px-4 py-3 rounded-lg transition font-semibold text-left ${
                   view === 'map'
-                    ? 'bg-white text-primary-600'
-                    : 'bg-primary-600 hover:bg-primary-700'
+                    ? 'bg-white text-blue-600'
+                    : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
                 🗺️ Mappa
@@ -134,8 +143,8 @@ export default function Header({ user, onLogout, view, setView }) {
                   onClick={() => handleNavigation('add')}
                   className={`px-4 py-3 rounded-lg transition font-semibold text-left ${
                     view === 'add'
-                      ? 'bg-white text-primary-600'
-                      : 'bg-primary-600 hover:bg-primary-700'
+                      ? 'bg-white text-blue-600'
+                      : 'bg-blue-600 hover:bg-blue-700'
                   }`}
                 >
                   ➕ Aggiungi Cantiere
