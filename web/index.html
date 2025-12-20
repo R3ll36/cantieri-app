@@ -67,6 +67,67 @@
           );
         });
       }
+
+      // PWA Install Prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        // Mostra banner installazione dopo 3 secondi
+        setTimeout(() => {
+          const installBanner = document.createElement('div');
+          installBanner.id = 'pwa-install-banner';
+          installBanner.innerHTML = `
+            <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #C41E3A, #A01828); color: white; padding: 16px 24px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 9999; max-width: 90%; width: 400px; animation: slideUp 0.4s ease-out;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                <div style="flex: 1;">
+                  <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">📱 Installa General Beton</div>
+                  <div style="font-size: 13px; opacity: 0.95;">Aggiungi l'app alla schermata principale</div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button onclick="installPWA()" style="background: white; color: #C41E3A; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer;">
+                    Installa
+                  </button>
+                  <button onclick="closePWABanner()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer;">
+                    ✕
+                  </button>
+                </div>
+              </div>
+            </div>
+            <style>
+              @keyframes slideUp {
+                from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+                to { transform: translateX(-50%) translateY(0); opacity: 1; }
+              }
+            </style>
+          `;
+          document.body.appendChild(installBanner);
+        }, 3000);
+      });
+
+      window.installPWA = async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('User choice:', outcome);
+        deferredPrompt = null;
+        closePWABanner();
+      };
+
+      window.closePWABanner = () => {
+        const banner = document.getElementById('pwa-install-banner');
+        if (banner) {
+          banner.style.animation = 'slideDown 0.3s ease-in';
+          setTimeout(() => banner.remove(), 300);
+        }
+      };
     </script>
+    <style>
+      @keyframes slideDown {
+        from { transform: translateX(-50%) translateY(0); opacity: 1; }
+        to { transform: translateX(-50%) translateY(100px); opacity: 0; }
+      }
+    </style>
   </body>
 </html>

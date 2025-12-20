@@ -19,32 +19,25 @@ export default function Header({ user, onLogout, view, setView }) {
     <header className="bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-lg sticky top-0 z-[1001]">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo General Beton e Titolo */}
+          {/* Logo General Beton */}
           <div className="flex items-center gap-3">
-            <div className="w-16 h-12 bg-white rounded-lg flex items-center justify-center px-2 shadow-md">
-              {/* Logo General Beton - ellisse rossa con testo */}
-              <div className="relative w-full h-full flex items-center justify-center">
-                <svg viewBox="0 0 120 50" className="w-full h-full">
-                  {/* Ellisse rossa */}
-                  <ellipse cx="60" cy="25" rx="58" ry="23" fill="#C41E3A" />
-                  {/* Rettangolo bianco centrale */}
-                  <rect x="28" y="10" width="64" height="30" fill="white" rx="15" />
-                  {/* Testo "general beton" */}
-                  <text x="60" y="30" fontFamily="Arial Black, sans-serif" fontSize="10" fontWeight="900" fill="#000" textAnchor="middle">
-                    general beton
-                  </text>
-                </svg>
-              </div>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold hidden sm:block">General Beton</h1>
-              <h1 className="text-lg font-bold sm:hidden">GB</h1>
-              <p className="text-xs opacity-90 hidden sm:block">Gestione Cantieri</p>
+            <div className="bg-white rounded-md px-3 py-1.5 shadow-md" style={{ height: '42px' }}>
+              {/* Logo General Beton - forma originale curva */}
+              <svg viewBox="0 0 340 80" style={{ height: '100%', width: 'auto' }}>
+                {/* Forma curva rossa superiore e inferiore */}
+                <path d="M 20,40 Q 0,20 20,10 L 320,10 Q 340,20 340,40 Q 340,60 320,70 L 20,70 Q 0,60 20,40 Z" fill="#C41E3A" />
+                {/* Ellisse bianca centrale */}
+                <ellipse cx="170" cy="40" rx="150" ry="28" fill="white" />
+                {/* Testo "general beton" */}
+                <text x="170" y="50" fontFamily="Arial Black, sans-serif" fontSize="22" fontWeight="900" fill="#000" textAnchor="middle">
+                  general beton
+                </text>
+              </svg>
             </div>
           </div>
 
-          {/* Desktop and Tablet Navigation (hidden only on mobile < 768px) */}
-          <nav className="hidden sm:flex items-center gap-4">
+          {/* Desktop and Tablet Navigation (hidden on mobile < 768px) */}
+          <nav className="hidden md:flex items-center gap-4">
             <button
               onClick={() => setView('list')}
               className={`px-4 py-2 rounded-lg transition font-semibold ${
@@ -94,10 +87,10 @@ export default function Header({ user, onLogout, view, setView }) {
             </div>
           </nav>
 
-          {/* Mobile Hamburger Button (only mobile, not tablet/desktop) */}
+          {/* Mobile Hamburger Button (only mobile < 768px) */}
           <button
             onClick={toggleMobileMenu}
-            className="sm:hidden p-2 bg-white hover:bg-gray-100 rounded-lg transition shadow-md"
+            className="md:hidden p-2 bg-white hover:bg-gray-100 rounded-lg transition shadow-md"
             aria-label="Menu"
           >
             {mobileMenuOpen ? (
@@ -114,9 +107,9 @@ export default function Header({ user, onLogout, view, setView }) {
           </button>
         </div>
 
-        {/* Mobile Menu Dropdown (only < 640px) */}
+        {/* Mobile Menu Dropdown (only < 768px) */}
         {mobileMenuOpen && (
-          <nav className="sm:hidden pb-4 border-t border-white/20 mt-2 pt-4 animate-slide-down">
+          <nav className="md:hidden pb-4 border-t border-white/20 mt-2 pt-4 animate-slide-down">
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => handleNavigation('list')}

@@ -122,11 +122,12 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
             <p className="text-sm">Modifica i filtri o aggiungi un nuovo cantiere</p>
           </div>
         ) : (
-          sortedCantieri.map((cantiere) => (
+          sortedCantieri.map((cantiere, index) => (
             <div
               key={cantiere.id}
-              className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
+              className="cantiere-card stagger-item border border-gray-200 rounded-lg p-4 cursor-pointer bg-white"
               onClick={() => onCantiereClick && onCantiereClick(cantiere)}
+              style={{ animationDelay: `${index * 0.05}s` }}
             >
               {/* Header card */}
               <div className="flex items-start justify-between mb-2">

@@ -128,6 +128,12 @@ export default function MapView({
             icon={getIcon(cantiere)}
             eventHandlers={{
               click: () => handleMarkerClick(cantiere),
+              mouseover: (e) => {
+                e.target.openPopup();
+              },
+              mouseout: (e) => {
+                e.target.closePopup();
+              },
             }}
           >
             {/* Tooltip sempre visibile con nome cantiere */}

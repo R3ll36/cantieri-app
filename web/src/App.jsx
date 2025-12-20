@@ -415,7 +415,7 @@ function App() {
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-4">
         <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-          <p>General Beton v1.0 • Gestione Cantieri Calcestruzzo • 100% Gratuito</p>
+          <p>General Beton v1.0 • Gestione Cantieri</p>
         </div>
       </footer>
     </div>
