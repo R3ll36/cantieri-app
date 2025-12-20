@@ -1,32 +1,61 @@
-# Cantieri App - Sistema Gestione Cantieri Calcestruzzo
+# 🚛 Cantieri App - Sistema Gestione Cantieri Calcestruzzo
 
-Sistema completo per gestione e localizzazione cantieri per autisti betonpompa - **100% GRATUITO**
+Sistema completo PWA per gestione e localizzazione cantieri per autisti betonpompa - **100% GRATUITO**
 
 ## 📋 Panoramica
 
+- **PWA (Progressive Web App)**: Installabile su iOS e Android come app nativa!
 - **Web App React**: Per impiantisti - gestione cantieri (aggiunta, modifica, visualizzazione)
-- **Mobile App React Native**: Per autisti - navigazione, note collaborative, real-time sync
+- **Mobile Web**: Per autisti - navigazione, note collaborative, real-time sync
 - **Backend Firebase**: Database real-time, storage foto/video, autenticazione
+
+## 🎉 Novità PWA
+
+✅ **Installabile come app su iOS e Android** - Nessun App Store necessario!
+✅ **Aggiornamenti automatici in tempo reale** - Sempre l'ultima versione
+✅ **Google Maps integrato** - Apre direttamente in modalità direzioni
+✅ **Funziona offline** - Service Worker cache
+✅ **Deploy gratuito su Vercel** - HTTPS, CDN globale, zero configurazione
 
 ## 🎯 Funzionalità Principali
 
 ### Web App (Impiantisti)
-- ✅ Mappa interattiva Leaflet
-- ✅ Aggiungi cantiere da link Google/Apple Maps o click diretto
-- ✅ Parsing automatico coordinate da link Maps
+- ✅ Mappa interattiva Leaflet con marker colorati
+- ✅ **Right-click su mappa** per aggiungere cantiere con popup conferma
+- ✅ Parsing automatico coordinate da link Google/Apple Maps
 - ✅ Form completo: nome, indirizzo, cliente, tipologia, note, foto, difficoltà, orari, coordinatore
-- ✅ Visualizza note/foto/video da autisti
-- ✅ CRUD completo con filtri e ricerca
-- ✅ Condivisione link Maps per ogni cantiere
+- ✅ Visualizza note/foto/video da autisti in real-time
+- ✅ CRUD completo con filtri e ricerca avanzata
+- ✅ Bottone **"Naviga"** - apre Google Maps in modalità direzioni
+- ✅ Login Email/Password + **Google OAuth**
 
-### Mobile App (Autisti)
-- ✅ Deep linking: link Maps aprono l'app automaticamente
-- ✅ Mappa con marker colorati (rosso=difficile, giallo=medio, verde=facile)
-- ✅ Navigazione Google Maps integrata (con alert sottopassi 3.90m)
+### Mobile PWA (Autisti)
+- ✅ **Installabile come app nativa** (iOS Safari + Android Chrome)
+- ✅ Mappa con marker colorati (rosso=difficile, giallo=medio, verde=facile, grigio=completato)
+- ✅ **Google Maps in modalità direzioni** - tap per avviare navigazione
 - ✅ Note collaborative real-time con foto/video
-- ✅ Condivisione cantieri via WhatsApp/SMS
-- ✅ Cronologia ultimi cantieri visitati
-- ✅ Modalità offline (cache locale)
+- ✅ Aggiornamenti automatici ogni 60 secondi
+- ✅ Service Worker per cache e prestazioni
+- ✅ Funziona offline (dati cached)
+
+## 🚀 Quick Start
+
+### Opzione 1: Deploy Rapido (Consigliato)
+
+Se vuoi pubblicare subito l'app online:
+
+1. **Leggi**: `COMANDI_RAPIDI.md` per istruzioni passo-passo
+2. **Crea repository GitHub**: https://github.com/new
+3. **Deploy su Vercel**: https://vercel.com/new
+4. **Installa PWA** su mobile e inizia a usarla!
+
+**Tempo totale**: ~10 minuti
+
+---
+
+### Opzione 2: Sviluppo Locale
+
+Se vuoi testare in locale prima del deploy:
 
 ## 🚀 Setup Iniziale
 
@@ -243,53 +272,88 @@ cantieri-app/
 
 ## 🛠️ Tecnologie
 
-- **Web**: React 18 + Vite + Leaflet + Tailwind CSS
-- **Mobile**: React Native + Expo + React Native Maps
+- **Frontend**: React 19 + Vite
+- **Mappa**: Leaflet + React Leaflet + OpenStreetMap (gratuito!)
+- **Styling**: Custom Vanilla CSS (Tailwind-like utilities)
+- **Form**: React Hook Form
 - **Backend**: Firebase (Firestore + Storage + Auth)
-- **Deployment**: Vercel (web) + EAS (mobile)
+- **PWA**: Service Worker + Web App Manifest
+- **Deployment**: Vercel (web hosting gratuito con CDN globale)
 
 ---
 
 ## 📱 Features Chiave
 
-### Deep Linking (Killer Feature!)
-Link Google/Apple Maps aprono automaticamente l'app mobile:
-- `https://maps.google.com/?q=46.022747,13.125890`
-- `https://maps.app.goo.gl/xyz`
-- `https://maps.apple.com/?ll=46.022747,13.125890`
+### 1. Google Maps in Modalità Direzioni
+Quando clicchi **"Naviga"** o apri un link cantiere:
+- Google Maps si apre **direttamente in modalità direzioni**
+- Partenza automatica da posizione corrente
+- Basta premere **"Avvia"** per partire
+- Formato: `https://maps.google.com/maps?saddr=Current+Location&daddr=LAT,LNG&directionsmode=driving`
 
-### Note Collaborative Autisti
+### 2. PWA Installabile (iOS + Android)
+**iOS (Safari)**:
+1. Apri sito → Condividi → "Aggiungi a Home"
+2. L'app appare sulla home screen come app nativa
+3. Funziona a schermo intero senza barra browser
+
+**Android (Chrome)**:
+1. Apri sito → Banner "Aggiungi a schermata Home"
+2. Oppure: Menu → "Installa app"
+3. Icona app sulla home screen
+
+**Aggiornamenti Real-Time**:
+- Service Worker controlla aggiornamenti ogni 60 secondi
+- Popup chiede conferma per ricaricare nuova versione
+- Zero downtime, sempre aggiornato!
+
+### 3. Right-Click per Aggiungere Cantieri
+- **Right-click** su mappa → appare marker blu temporaneo
+- Popup con coordinate e bottoni "Aggiungi" / "Annulla"
+- Conferma → apre form compilato con coordinate
+
+### 4. Note Collaborative Autisti
 Gli autisti si aiutano tra loro in tempo reale:
 - "Oggi parcheggio pieno, usa via laterale"
 - "Attenzione: terreno fangoso dopo pioggia"
 - Foto/video dell'ingresso aggiornato
-
-### Real-time Sync
-Dati sincronizzati istantaneamente tra web e mobile
+- Sincronizzazione istantanea via Firestore
 
 ---
 
 ## 🚧 Roadmap
 
 **✅ FASE 1 (Completata):**
-- Setup Firebase
-- Web app base con mappa e CRUD
-- Parsing link Maps
+- Setup Firebase (Firestore + Storage + Auth)
+- Web app React + Vite con mappa Leaflet
+- CRUD cantieri con filtri e ricerca
+- Parsing automatico link Google/Apple Maps
+- Right-click per aggiungere cantieri
+- Google Maps in modalità direzioni
+- Note autisti collaborative
+- Login Email/Password + Google OAuth
+- **PWA completo** (Service Worker + Manifest)
+- **Installabile su iOS e Android**
+- **Aggiornamenti automatici real-time**
 
 **🔄 FASE 2 (In corso):**
-- Mobile app con deep linking
-- Note autisti collaborative
-- Navigazione Google Maps
+- Deployment su Vercel
+- Creazione icone PWA professionali
+- Testing completo su iOS e Android
+- Ottimizzazioni performance
 
 **📅 FASE 3 (Prossimamente):**
 - Testing con autisti reali
-- PWA per distribuzione gratuita
-- Notifiche push
+- Raccolta feedback e miglioramenti UX
+- Tooltip con nome cantiere sopra marker
+- Notifiche push per nuovi cantieri/note
 
 **🔮 Futuro:**
+- Modalità offline avanzata (cache completa)
 - Database sottopassi crowd-sourced
-- Chat per cantiere
-- Statistiche e report
+- Chat real-time per cantiere
+- Statistiche e report (cantieri completati, ore lavorate)
+- Esportazione dati (PDF, Excel)
 
 ---
 
