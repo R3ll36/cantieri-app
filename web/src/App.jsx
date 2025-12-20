@@ -145,10 +145,14 @@ function App() {
   // Login screen (se non autenticato)
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full">
           <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Cantieri App</h1>
+            {/* Logo General Beton */}
+            <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <span className="text-white font-black text-3xl" style={{ fontFamily: 'Arial Black, sans-serif' }}>GB</span>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">General Beton</h1>
             <p className="text-gray-600">Gestione Cantieri Calcestruzzo</p>
           </div>
 
@@ -411,7 +415,7 @@ function App() {
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-4">
         <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-          <p>Cantieri App v1.0 • Gestione Cantieri Calcestruzzo • 100% Gratuito</p>
+          <p>General Beton v1.0 • Gestione Cantieri Calcestruzzo • 100% Gratuito</p>
         </div>
       </footer>
     </div>

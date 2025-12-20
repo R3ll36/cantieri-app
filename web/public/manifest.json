@@ -1,11 +1,11 @@
 {
-  "name": "Cantieri App - Gestione Cantieri Pompe Calcestruzzo",
-  "short_name": "Cantieri App",
-  "description": "App per gestione cantieri e navigazione per autisti pompe calcestruzzo",
+  "name": "General Beton - Gestione Cantieri Pompe Calcestruzzo",
+  "short_name": "General Beton",
+  "description": "App General Beton per gestione cantieri e navigazione per autisti pompe calcestruzzo",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f97316",
-  "theme_color": "#f97316",
+  "background_color": "#dc2626",
+  "theme_color": "#dc2626",
   "orientation": "portrait-primary",
   "icons": [
     {

@@ -19,20 +19,23 @@ export default function Header({ user, onLogout, view, setView }) {
     <header className="bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-lg sticky top-0 z-[1001]">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo e Titolo */}
+          {/* Logo General Beton e Titolo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-              <span className="text-2xl">🚛</span>
+            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-1.5 shadow-md">
+              {/* Logo General Beton stilizzato */}
+              <div className="w-full h-full bg-gradient-to-br from-red-600 to-red-700 rounded-md flex items-center justify-center">
+                <span className="text-white font-black text-lg" style={{ fontFamily: 'Arial Black, sans-serif' }}>GB</span>
+              </div>
             </div>
             <div>
-              <h1 className="text-xl font-bold hidden sm:block">Cantieri App</h1>
-              <h1 className="text-lg font-bold sm:hidden">Cantieri</h1>
+              <h1 className="text-xl font-bold hidden sm:block">General Beton</h1>
+              <h1 className="text-lg font-bold sm:hidden">GB</h1>
               <p className="text-xs opacity-90 hidden sm:block">Gestione Cantieri</p>
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-4">
+          {/* Desktop and Tablet Navigation (hidden only on mobile < 768px) */}
+          <nav className="hidden sm:flex items-center gap-4">
             <button
               onClick={() => setView('list')}
               className={`px-4 py-2 rounded-lg transition font-semibold ${
@@ -82,10 +85,10 @@ export default function Header({ user, onLogout, view, setView }) {
             </div>
           </nav>
 
-          {/* Mobile Hamburger Button */}
+          {/* Mobile Hamburger Button (only < 640px) */}
           <button
             onClick={toggleMobileMenu}
-            className="md:hidden p-2 hover:bg-primary-600 rounded-lg transition"
+            className="sm:hidden p-2 hover:bg-primary-600 rounded-lg transition"
             aria-label="Menu"
           >
             {mobileMenuOpen ? (
@@ -102,9 +105,9 @@ export default function Header({ user, onLogout, view, setView }) {
           </button>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Menu Dropdown (only < 640px) */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 border-t border-white/20 mt-2 pt-4 animate-slide-down">
+          <nav className="sm:hidden pb-4 border-t border-white/20 mt-2 pt-4 animate-slide-down">
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => handleNavigation('list')}

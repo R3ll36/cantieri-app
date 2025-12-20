@@ -111,10 +111,12 @@ export default function MapView({
         className="w-full h-full"
         scrollWheelZoom={true}
       >
-        {/* Tile Layer - OpenStreetMap (GRATUITO) */}
+        {/* Tile Layer - CartoDB Voyager (stile Apple Maps con autostrade verde chiaro) */}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          subdomains="abcd"
+          maxZoom={20}
         />
 
         {/* Handler per click/right-click su mappa */}
