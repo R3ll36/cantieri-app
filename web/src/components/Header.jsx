@@ -33,7 +33,7 @@ export default function Header({ user, onLogout, view, setView }) {
             />
           </div>
 
-          {/* Desktop Navigation - sempre visibile su desktop */}
+          {/* Desktop Navigation - SEMPRE visibile su schermi >= 768px */}
           <div className="hidden md:flex items-center gap-4">
             <nav className="flex gap-2">
               <button
@@ -86,10 +86,10 @@ export default function Header({ user, onLogout, view, setView }) {
             </div>
           </div>
 
-          {/* Mobile Hamburger Button - solo su mobile */}
+          {/* Mobile Hamburger Button - SOLO < 768px */}
           <button
             onClick={toggleMobileMenu}
-            className="md:hidden p-2 rounded-lg transition hover:bg-gray-100"
+            className="block md:hidden p-2 rounded-lg transition hover:bg-gray-100"
             aria-label="Menu"
           >
             {mobileMenuOpen ? (
@@ -106,9 +106,9 @@ export default function Header({ user, onLogout, view, setView }) {
           </button>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Menu Dropdown - SOLO < 768px */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 border-t border-gray-200 mt-4 pt-4 animate-slide-down">
+          <nav className="block md:hidden pb-4 border-t border-gray-200 mt-4 pt-4 animate-slide-down">
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => handleNavigation('list')}
