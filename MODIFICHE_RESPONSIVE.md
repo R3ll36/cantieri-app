@@ -220,21 +220,38 @@ created_by: user.email // o user.displayName
 
 ## 🔄 Aggiornamenti e Deploy
 
+### ✅ ULTIMO AGGIORNAMENTO (2025-12-20)
+
+**Commit**: `4d59b11` - "Add mobile-responsive header with hamburger menu"
+
+**Modifiche implementate**:
+- ✅ Header mobile responsive con menu hamburger
+- ✅ Icona hamburger (3 linee orizzontali) su mobile
+- ✅ Icona X per chiudere menu
+- ✅ Desktop navigation nascosta su schermi < 768px
+- ✅ Dropdown menu mobile con animazione slide-down
+- ✅ User info e logout integrati nel menu mobile
+- ✅ Component Header.jsx integrato in App.jsx
+
+**Deploy Vercel**: Vercel sta facendo automaticamente redeploy!
+
 ### Push su GitHub
 ```bash
 cd /Users/cosminrus/Projects/cantieri-app
 git push
 ```
 
-### Vercel Redeploy
-Vercel farà automaticamente redeploy quando rileva il nuovo commit!
-
 ### Test su Mobile
 1. Apri URL Vercel su mobile Safari/Chrome
-2. Verifica tooltip sopra marker (sempre visibile)
-3. Tap su marker → popup appare
-4. Tap su numero telefono → avvia chiamata
-5. Verifica layout responsive (1 colonna)
+2. Verifica **hamburger menu** (3 linee) in alto a destra
+3. Tap hamburger → menu si apre con animazione
+4. Tap su Lista/Mappa/Aggiungi → naviga e menu si chiude
+5. Tap X → menu si chiude
+6. Su mappa: hover marker → popup dettagli (desktop)
+7. Su mappa: tap marker → vai a pagina dettagli (mobile)
+8. Verifica tooltip sopra marker (sempre visibile)
+9. Tap su numero telefono → avvia chiamata
+10. Verifica layout responsive (1 colonna)
 
 ---
 
