@@ -1,18 +1,18 @@
-<svg viewBox="0 0 1090 550" xmlns="http://www.w3.org/2000/svg">
-  <!-- Sfondo bianco con bordo nero arrotondato -->
-  <rect x="10" y="10" width="1070" height="530" rx="50" ry="50" fill="white" stroke="black" stroke-width="8"/>
+<svg viewBox="0 0 1090 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sfondo bianco -->
+  <rect x="0" y="0" width="1090" height="280" fill="white"/>
 
   <!-- Forma curva rossa superiore -->
-  <path d="M 70,275 Q 70,180 140,130 L 950,130 Q 1020,180 1020,275" fill="#D32F2F"/>
+  <path d="M 70,140 Q 70,60 150,30 L 940,30 Q 1020,60 1020,140" fill="#D32F2F"/>
 
   <!-- Forma curva rossa inferiore -->
-  <path d="M 70,275 Q 70,370 140,420 L 950,420 Q 1020,370 1020,275" fill="#D32F2F"/>
+  <path d="M 70,140 Q 70,220 150,250 L 940,250 Q 1020,220 1020,140" fill="#D32F2F"/>
 
   <!-- Ellisse bianca centrale -->
-  <ellipse cx="545" cy="275" rx="450" ry="110" fill="white"/>
+  <ellipse cx="545" cy="140" rx="440" ry="95" fill="white"/>
 
   <!-- Testo "general beton" -->
-  <text x="545" y="310" font-family="Arial Black, sans-serif" font-size="90" font-weight="900" fill="#000" text-anchor="middle">
+  <text x="545" y="175" font-family="Arial Black, sans-serif" font-size="75" font-weight="900" fill="#000" text-anchor="middle">
     general beton
   </text>
 </svg>

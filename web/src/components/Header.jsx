@@ -28,8 +28,8 @@ export default function Header({ user, onLogout, view, setView }) {
             <img
               src="/logo-general-beton.svg"
               alt="General Beton"
-              className="h-12 transition hover:scale-105"
-              style={{ height: '48px', width: 'auto' }}
+              className="transition hover:scale-105"
+              style={{ height: '50px', width: 'auto', maxWidth: '250px' }}
             />
           </div>
 
