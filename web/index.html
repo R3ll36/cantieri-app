@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+
+    <!-- Meta tags base -->
+    <title>Cantieri App - Gestione Cantieri Pompe Calcestruzzo</title>
+    <meta name="description" content="App per gestione cantieri e navigazione per autisti pompe calcestruzzo. Visualizza cantieri, note operative, e naviga con Google Maps." />
+    <meta name="theme-color" content="#f97316" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/icon-192.png" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Apple iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Cantieri App" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
+
+    <!-- Android PWA -->
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- Microsoft Windows -->
+    <meta name="msapplication-TileColor" content="#f97316" />
+    <meta name="msapplication-TileImage" content="/icon-192.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Registrazione Service Worker per PWA -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(
+            (registration) => {
+              console.log('✅ Service Worker registrato:', registration.scope);
+
+              // Controlla aggiornamenti ogni 60 secondi
+              setInterval(() => {
+                registration.update();
+              }, 60000);
+
+              // Ascolta aggiornamenti
+              registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // Nuovo contenuto disponibile, ricarica automaticamente
+                    if (confirm('Nuova versione disponibile! Vuoi ricaricare?')) {
+                      newWorker.postMessage({ type: 'SKIP_WAITING' });
+                      window.location.reload();
+                    }
+                  }
+                });
+              });
+            },
+            (error) => {
+              console.error('❌ Errore registrazione Service Worker:', error);
+            }
+          );
+        });
+      }
+    </script>
+  </body>
+</html>
