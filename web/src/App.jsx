@@ -5,6 +5,7 @@ import MapView from './components/MapView';
 import CantieriList from './components/CantieriList';
 import CantiereForm from './components/CantiereForm';
 import NoteAutisti from './components/NoteAutisti';
+import Header from './components/Header';
 
 function App() {
   // Stato autenticazione
@@ -239,70 +240,8 @@ function App() {
   // Main app UI
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-md">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Cantieri App</h1>
-            <p className="text-sm text-gray-600">
-              {cantieri.length} cantieri totali
-              {user.isGuest && ' • Modalità Solo Lettura'}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {/* Bottoni navigazione */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setView('list')}
-                className={`px-4 py-2 rounded-lg font-semibold transition ${
-                  view === 'list'
-                    ? 'bg-primary-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                📋 Lista
-              </button>
-
-              <button
-                onClick={() => setView('map')}
-                className={`px-4 py-2 rounded-lg font-semibold transition ${
-                  view === 'map'
-                    ? 'bg-primary-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                🗺️ Mappa
-              </button>
-
-              {!user.isGuest && (
-                <button
-                  onClick={() => {
-                    setView('add');
-                    setClickedCoordinates(null);
-                  }}
-                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition"
-                >
-                  ➕ Nuovo
-                </button>
-              )}
-            </div>
-
-            {/* User info e logout */}
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-600">
-                {user.isGuest ? 'Ospite' : user.email}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition"
-              >
-                Esci
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Header con menu mobile responsive */}
+      <Header user={user} onLogout={handleLogout} view={view} setView={setView} />
 
       {/* Main content */}
       <main className="flex-1 container mx-auto px-4 py-6">
