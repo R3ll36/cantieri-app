@@ -7,6 +7,7 @@ import CantiereForm from './components/CantiereForm';
 import NoteAutisti from './components/NoteAutisti';
 import Header from './components/Header';
 import Settings from './components/Settings';
+import IOSInstallPrompt from './components/IOSInstallPrompt';
 import { useTheme } from './context/ThemeContext';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   // PWA Install Prompt State
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const [showIOSPrompt, setShowIOSPrompt] = useState(false);
 
   // Stato autenticazione
   const [user, setUser] = useState(null);
@@ -203,19 +205,14 @@ function App() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     if (isIOS) {
-      // Su iOS, mostra istruzioni per aggiungere manualmente
-      alert(
-        '📱 Per installare su iPhone/iPad:\n\n' +
-        '1. Tap sul pulsante Condividi (icona quadrato con freccia) ⬆️\n' +
-        '2. Scorri e tap su "Aggiungi a Home" 🏠\n' +
-        '3. Tap "Aggiungi" in alto a destra ✅'
-      );
+      // Su iOS, mostra tutorial visivo interattivo
+      setShowIOSPrompt(true);
       setShowInstallBanner(false);
       return;
     }
 
     if (!deferredPrompt) {
-      // Android/Mobile senza supporto prompt
+      // Android/Mobile senza supporto prompt - mostra istruzioni
       alert(
         '📱 Per installare l\'app:\n\n' +
         'Apri il menu del browser (⋮) e seleziona "Aggiungi a schermata Home" o "Installa app"'
@@ -224,16 +221,25 @@ function App() {
       return;
     }
 
-    // Android con supporto nativo
-    deferredPrompt.prompt();
+    // Android con supporto nativo - PROMPT AUTOMATICO
+    try {
+      deferredPrompt.prompt();
 
-    // Aspetta la risposta dell'utente
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`PWA installation outcome: ${outcome}`);
+      // Aspetta la risposta dell'utente
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`PWA installation outcome: ${outcome}`);
 
-    // Resetta il prompt
-    setDeferredPrompt(null);
-    setShowInstallBanner(false);
+      if (outcome === 'accepted') {
+        console.log('✅ PWA installata con successo!');
+      }
+
+      // Resetta il prompt
+      setDeferredPrompt(null);
+      setShowInstallBanner(false);
+    } catch (error) {
+      console.error('Errore durante installazione PWA:', error);
+      setShowInstallBanner(false);
+    }
   };
 
   // Dismiss PWA banner
@@ -377,6 +383,11 @@ function App() {
     }}>
       {/* Header con menu mobile responsive */}
       <Header user={user} onLogout={handleLogout} view={view} setView={setView} />
+
+      {/* iOS Install Prompt - Tutorial visivo */}
+      {showIOSPrompt && (
+        <IOSInstallPrompt onClose={() => setShowIOSPrompt(false)} />
+      )}
 
       {/* PWA Install Banner - mostra su mobile e desktop */}
       {showInstallBanner && (
