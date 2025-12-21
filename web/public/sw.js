@@ -1,5 +1,5 @@
-// Service Worker per PWA - Versione 1.2.0
-const CACHE_NAME = 'cantieri-app-v2';
+// Service Worker per PWA - Versione 1.3.0
+const CACHE_NAME = 'cantieri-app-v3';
 const urlsToCache = [
   '/',
   '/index.html',
