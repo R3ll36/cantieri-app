@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Stili per la navbar responsive */
+@media (max-width: 767px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Assicura che il menu mobile sia sopra gli altri contenuti */
+.relative {
+  position: relative;
+}
+
+.z-50 {
+  z-index: 50;
+}
