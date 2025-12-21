@@ -610,6 +610,39 @@ function App() {
                     <p className="text-sm text-yellow-900">{selectedCantiere.note_operative}</p>
                   </div>
                 )}
+
+                {/* Metri Cubi - Visibile a tutti */}
+                {(selectedCantiere.metri_cubi_oggi > 0 || selectedCantiere.metri_cubi_precedenti > 0) && (
+                  <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-blue-300 shadow-sm">
+                    <h4 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                      📊 Metri Cubi Calcestruzzo
+                    </h4>
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div className="bg-white p-3 rounded-lg shadow-sm">
+                        <p className="text-xs text-gray-600 mb-1">🎯 Da Fare Oggi</p>
+                        <p className="text-2xl font-bold text-blue-600">
+                          {parseFloat(selectedCantiere.metri_cubi_oggi || 0).toFixed(1)}
+                          <span className="text-sm font-normal text-gray-500 ml-1">m³</span>
+                        </p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg shadow-sm">
+                        <p className="text-xs text-gray-600 mb-1">✅ Già Fatti</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          {parseFloat(selectedCantiere.metri_cubi_precedenti || 0).toFixed(1)}
+                          <span className="text-sm font-normal text-gray-500 ml-1">m³</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-r from-green-500 to-green-600 p-3 rounded-lg text-white shadow-md">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold">📈 Totale Fine Giornata:</span>
+                        <span className="text-2xl font-bold">
+                          {(parseFloat(selectedCantiere.metri_cubi_oggi || 0) + parseFloat(selectedCantiere.metri_cubi_precedenti || 0)).toFixed(1)} m³
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Foto cantiere */}

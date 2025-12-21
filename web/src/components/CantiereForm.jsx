@@ -39,6 +39,8 @@ export default function CantiereForm({
       data_fine_prevista: '',
       coordinatore_nome: '',
       coordinatore_telefono: '',
+      metri_cubi_oggi: 0,
+      metri_cubi_precedenti: 0,
     },
   });
 
@@ -376,7 +378,63 @@ export default function CantiereForm({
           </div>
         </div>
 
-        {/* Sezione 5: Foto */}
+        {/* Sezione 5: Metri Cubi */}
+        <div className="space-y-4">
+          <h3 className="font-semibold text-gray-900 text-lg">📊 Metri Cubi Calcestruzzo</h3>
+          <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+            <p className="text-sm text-blue-800 font-medium">
+              💡 Questi dati sono visibili a tutti gli utenti e autisti
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                🎯 Metri Cubi da Fare Oggi
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                {...register('metri_cubi_oggi')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="es. 25.5"
+              />
+              <p className="text-xs text-gray-500 mt-1">Quantità programmata per oggi</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                ✅ Metri Cubi Fatti in Precedenza
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                {...register('metri_cubi_precedenti')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="es. 120.0"
+              />
+              <p className="text-xs text-gray-500 mt-1">Totale consegnato fino a ieri</p>
+            </div>
+          </div>
+
+          {/* Calcolo totale previsto */}
+          {(watch('metri_cubi_oggi') > 0 || watch('metri_cubi_precedenti') > 0) && (
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-green-800">
+                  📈 Totale Previsto Fine Giornata:
+                </span>
+                <span className="text-xl font-bold text-green-600">
+                  {(parseFloat(watch('metri_cubi_oggi') || 0) + parseFloat(watch('metri_cubi_precedenti') || 0)).toFixed(1)} m³
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Sezione 6: Foto */}
         <div className="space-y-4">
           <h3 className="font-semibold text-gray-900 text-lg">Foto Cantiere (max 5)</h3>
 

@@ -262,29 +262,6 @@ export default function MapView({
         )}
       </MapContainer>
 
-      {/* Legenda */}
-      <div className="absolute bottom-4 right-4 bg-white p-3 rounded-lg shadow-lg z-[1000]">
-        <h4 className="font-semibold text-sm mb-2">Legenda</h4>
-        <div className="space-y-1 text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span>Facile</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <span>Medio</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <span>Difficile</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-            <span>Completato</span>
-          </div>
-        </div>
-      </div>
-
       {/* Istruzioni mappa (responsive: desktop vs mobile) */}
       {onMapClick && !tempMarker && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg z-[1000] animate-pulse">
