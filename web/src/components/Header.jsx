@@ -1,97 +1,83 @@
 import { useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Header({ user, onLogout, view, setView }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleViewChange = (newView) => {
-    setView(newView);
-    setIsMenuOpen(false); // Chiudi menu dopo la selezione su mobile
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+  const { colors, isDarkMode, toggleDarkMode } = useTheme();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white shadow-md relative">
+    <header style={{ backgroundColor: colors.navbarBg, boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' }}>
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-3">
-          {/* Immagine logo: su mobile 100x70px, su desktop più piccolo (max 80px) */}
-          <div className="w-[100px] h-[70px] md:w-[80px] md:h-[56px] flex items-center justify-center overflow-hidden">
-            <img
-              src="/general-beton.png" // Usa il PNG invece del SVG
-              alt="General Beton Logo"
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                // Fallback se l'immagine non esiste
-                e.target.onerror = null;
-                e.target.src = '/logo-general-beton.svg'; // Fallback al SVG
-              }}
-            />
-          </div>
-          {/* Testo visibile solo su desktop */}
-          <div className="hidden md:block">
-            <h1 className="text-xl font-bold text-gray-800">General Beton</h1>
-            <p className="text-xs text-gray-500">Gestione Cantieri</p>
-          </div>
+        <div
+          className="flex items-center gap-3 cursor-pointer"
+          onClick={() => setView('map')}
+        >
+          <img
+            src="/betoniera.png?v=3"
+            alt="General Beton"
+            className="navbar-logo"
+          />
         </div>
 
-        {/* Hamburger button a destra - visibile solo su mobile */}
+        {/* Hamburger button - ONLY mobile (< 640px) */}
         <button
-          onClick={toggleMenu}
-          className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-200 focus:outline-none"
-          aria-label="Menu"
+          className="sm:hidden"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          style={{
+            backgroundColor: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '1.5rem',
+            color: colors.textPrimary,
+            padding: '0.5rem'
+          }}
         >
-          <svg
-            className="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {isMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
+          {isMobileMenuOpen ? '✕' : '☰'}
         </button>
 
-        {/* Navigation desktop - visibile solo su schermi medi e grandi */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Desktop Navigation - hidden on mobile */}
+        <div className="hidden sm:flex items-center gap-3">
           <button
             onClick={() => setView('list')}
-            className={`px-4 py-2 rounded-lg font-semibold transition ${
-              view === 'list'
-                ? 'bg-red-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+            style={{
+              backgroundColor: view === 'list' ? colors.buttonActiveBg : colors.buttonInactiveBg,
+              color: view === 'list' ? colors.buttonActiveText : colors.buttonInactiveText,
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              fontWeight: '600',
+              transition: 'all 0.2s',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              if (view !== 'list') e.target.style.backgroundColor = colors.buttonHover;
+            }}
+            onMouseLeave={(e) => {
+              if (view !== 'list') e.target.style.backgroundColor = colors.buttonInactiveBg;
+            }}
           >
             Lista
           </button>
 
           <button
             onClick={() => setView('map')}
-            className={`px-4 py-2 rounded-lg font-semibold transition ${
-              view === 'map'
-                ? 'bg-red-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+            style={{
+              backgroundColor: view === 'map' ? colors.buttonActiveBg : colors.buttonInactiveBg,
+              color: view === 'map' ? colors.buttonActiveText : colors.buttonInactiveText,
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              fontWeight: '600',
+              transition: 'all 0.2s',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              if (view !== 'map') e.target.style.backgroundColor = colors.buttonHover;
+            }}
+            onMouseLeave={(e) => {
+              if (view !== 'map') e.target.style.backgroundColor = colors.buttonInactiveBg;
+            }}
           >
             Mappa
           </button>
@@ -99,111 +85,201 @@ export default function Header({ user, onLogout, view, setView }) {
           {!user?.isGuest && (
             <button
               onClick={() => setView('add')}
-              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition"
+              style={{
+                backgroundColor: colors.success,
+                color: colors.textWhite,
+                padding: '0.5rem 1rem',
+                borderRadius: '0.5rem',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = colors.successHover;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = colors.success;
+              }}
             >
               Nuovo
             </button>
           )}
 
-          <div className="flex items-center gap-2 ml-4 pl-4 border-l border-gray-300">
-            <span className="text-sm text-gray-600">
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={toggleDarkMode}
+            style={{
+              backgroundColor: colors.buttonInactiveBg,
+              color: colors.buttonInactiveText,
+              padding: '0.5rem 0.75rem',
+              borderRadius: '0.5rem',
+              fontWeight: '600',
+              transition: 'all 0.2s',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '1.25rem',
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = colors.buttonHover;
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = colors.buttonInactiveBg;
+            }}
+            title={isDarkMode ? 'Modalità chiara' : 'Modalità scura'}
+          >
+            {isDarkMode ? '☀️' : '🌙'}
+          </button>
+
+          <div className="flex items-center gap-2 ml-4 pl-4" style={{ borderLeft: `1px solid ${colors.border}` }}>
+            <span style={{ fontSize: '0.875rem', color: colors.textSecondary }}>
               {user?.isGuest ? 'Ospite' : user.email}
             </span>
             <button
               onClick={onLogout}
-              className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition"
+              style={{
+                backgroundColor: colors.danger,
+                color: colors.textWhite,
+                padding: '0.375rem 0.75rem',
+                borderRadius: '0.5rem',
+                fontWeight: '600',
+                fontSize: '0.875rem',
+                transition: 'all 0.2s',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = colors.dangerHover;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = colors.danger;
+              }}
             >
               Esci
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Menu mobile a schermo intero */}
-        {isMenuOpen && (
-          <div className="fixed inset-0 bg-white z-50 md:hidden flex flex-col">
-            {/* Header del menu con X per chiudere */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-black text-xl" style={{ fontFamily: 'Arial Black, sans-serif' }}>GB</span>
-                </div>
-                <div>
-                  <h2 className="text-lg font-bold text-gray-800">Menu</h2>
-                </div>
-              </div>
+      {/* Mobile Menu - ONLY visible when open and on mobile (< 640px) */}
+      {isMobileMenuOpen && (
+        <div
+          className="sm:hidden mobile-menu-enter"
+          style={{
+            backgroundColor: colors.surface,
+            borderTop: `1px solid ${colors.border}`,
+            padding: '1rem'
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <button
+              onClick={() => {
+                setView('list');
+                setIsMobileMenuOpen(false);
+              }}
+              style={{
+                backgroundColor: view === 'list' ? colors.buttonActiveBg : colors.buttonInactiveBg,
+                color: view === 'list' ? colors.buttonActiveText : colors.buttonInactiveText,
+                padding: '0.75rem',
+                borderRadius: '0.5rem',
+                fontWeight: '600',
+                border: 'none',
+                cursor: 'pointer',
+                textAlign: 'left'
+              }}
+            >
+              📋 Lista
+            </button>
+
+            <button
+              onClick={() => {
+                setView('map');
+                setIsMobileMenuOpen(false);
+              }}
+              style={{
+                backgroundColor: view === 'map' ? colors.buttonActiveBg : colors.buttonInactiveBg,
+                color: view === 'map' ? colors.buttonActiveText : colors.buttonInactiveText,
+                padding: '0.75rem',
+                borderRadius: '0.5rem',
+                fontWeight: '600',
+                border: 'none',
+                cursor: 'pointer',
+                textAlign: 'left'
+              }}
+            >
+              🗺️ Mappa
+            </button>
+
+            {!user?.isGuest && (
               <button
-                onClick={closeMenu}
-                className="p-2 rounded-full hover:bg-gray-200"
-                aria-label="Chiudi menu"
+                onClick={() => {
+                  setView('add');
+                  setIsMobileMenuOpen(false);
+                }}
+                style={{
+                  backgroundColor: colors.success,
+                  color: colors.textWhite,
+                  padding: '0.75rem',
+                  borderRadius: '0.5rem',
+                  fontWeight: '600',
+                  border: 'none',
+                  cursor: 'pointer',
+                  textAlign: 'left'
+                }}
               >
-                <svg
-                  className="w-8 h-8 text-gray-700"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                ➕ Nuovo Cantiere
               </button>
-            </div>
+            )}
 
-            {/* Voci del menu una sotto l'altra */}
-            <div className="flex-1 flex flex-col p-6 space-y-4 overflow-y-auto">
+            <button
+              onClick={() => {
+                toggleDarkMode();
+                setIsMobileMenuOpen(false);
+              }}
+              style={{
+                backgroundColor: colors.buttonInactiveBg,
+                color: colors.buttonInactiveText,
+                padding: '0.75rem',
+                borderRadius: '0.5rem',
+                fontWeight: '600',
+                border: 'none',
+                cursor: 'pointer',
+                textAlign: 'left'
+              }}
+            >
+              {isDarkMode ? '☀️ Modalità chiara' : '🌙 Modalità scura'}
+            </button>
+
+            <div style={{
+              borderTop: `1px solid ${colors.border}`,
+              paddingTop: '0.75rem',
+              marginTop: '0.5rem'
+            }}>
+              <p style={{ fontSize: '0.875rem', color: colors.textSecondary, marginBottom: '0.75rem' }}>
+                {user?.isGuest ? 'Ospite' : user.email}
+              </p>
               <button
-                onClick={() => handleViewChange('list')}
-                className={`px-6 py-4 rounded-xl font-semibold text-left text-lg transition ${
-                  view === 'list'
-                    ? 'bg-red-600 text-white'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
+                onClick={() => {
+                  onLogout();
+                  setIsMobileMenuOpen(false);
+                }}
+                style={{
+                  backgroundColor: colors.danger,
+                  color: colors.textWhite,
+                  padding: '0.75rem',
+                  borderRadius: '0.5rem',
+                  fontWeight: '600',
+                  border: 'none',
+                  cursor: 'pointer',
+                  width: '100%'
+                }}
               >
-                📋 Lista Cantieri
+                Esci
               </button>
-
-              <button
-                onClick={() => handleViewChange('map')}
-                className={`px-6 py-4 rounded-xl font-semibold text-left text-lg transition ${
-                  view === 'map'
-                    ? 'bg-red-600 text-white'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
-              >
-                🗺️ Mappa
-              </button>
-
-              {!user?.isGuest && (
-                <button
-                  onClick={() => handleViewChange('add')}
-                  className="px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl text-left text-lg transition"
-                >
-                  ➕ Nuovo Cantiere
-                </button>
-              )}
-
-              <div className="mt-8 pt-8 border-t border-gray-300">
-                <div className="mb-6">
-                  <p className="text-sm text-gray-500 mb-2">Accesso come</p>
-                  <p className="text-lg font-medium text-gray-800">
-                    {user?.isGuest ? '👤 Ospite' : user.email}
-                  </p>
-                </div>
-                <button
-                  onClick={onLogout}
-                  className="w-full px-6 py-4 bg-red-500 hover:bg-red-600 text-white text-lg font-semibold rounded-xl transition"
-                >
-                  🚪 Esci
-                </button>
-              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 }

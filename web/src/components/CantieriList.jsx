@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { generateGoogleMapsLink, openGoogleMapsDirections } from '../utils/mapsLinkParser';
+import { useTheme } from '../context/ThemeContext';
 
 /**
  * Lista cantieri con filtri e ricerca
@@ -10,6 +11,7 @@ import { generateGoogleMapsLink, openGoogleMapsDirections } from '../utils/mapsL
  * @param {Function} props.onDelete - Callback elimina cantiere
  */
 export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, onDelete }) {
+  const { colors } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStato, setFilterStato] = useState('all');
   const [filterTipologia, setFilterTipologia] = useState('all');
@@ -57,8 +59,23 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Lista Cantieri</h2>
+    <div style={{
+      backgroundColor: colors.surface,
+      borderRadius: '0.5rem',
+      boxShadow: '0 10px 15px -3px rgb(0 0 0/0.1)',
+      padding: '1.5rem',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <h2 style={{
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        marginBottom: '1rem',
+        color: colors.textPrimary
+      }}>
+        Lista Cantieri
+      </h2>
 
       {/* Barra ricerca e filtri */}
       <div className="space-y-3 mb-4">
@@ -68,7 +85,14 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
           placeholder="🔍 Cerca per nome o indirizzo..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          style={{
+            width: '100%',
+            padding: '0.5rem 1rem',
+            border: `1px solid ${colors.border}`,
+            borderRadius: '0.5rem',
+            backgroundColor: colors.surface,
+            color: colors.textPrimary
+          }}
         />
 
         {/* Filtri */}
@@ -76,7 +100,14 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
           <select
             value={filterStato}
             onChange={(e) => setFilterStato(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+            style={{
+              padding: '0.5rem 0.75rem',
+              border: `1px solid ${colors.border}`,
+              borderRadius: '0.5rem',
+              fontSize: '0.875rem',
+              backgroundColor: colors.surface,
+              color: colors.textPrimary
+            }}
           >
             <option value="all">Tutti gli stati</option>
             <option value="Attivo">Attivo</option>
@@ -87,7 +118,14 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
           <select
             value={filterTipologia}
             onChange={(e) => setFilterTipologia(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+            style={{
+              padding: '0.5rem 0.75rem',
+              border: `1px solid ${colors.border}`,
+              borderRadius: '0.5rem',
+              fontSize: '0.875rem',
+              backgroundColor: colors.surface,
+              color: colors.textPrimary
+            }}
           >
             <option value="all">Tutte le tipologie</option>
             <option value="Residenziale">Residenziale</option>
@@ -99,17 +137,28 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+            style={{
+              padding: '0.5rem 0.75rem',
+              border: `1px solid ${colors.border}`,
+              borderRadius: '0.5rem',
+              fontSize: '0.875rem',
+              backgroundColor: colors.surface,
+              color: colors.textPrimary
+            }}
           >
             <option value="created_at">Più recenti</option>
             <option value="nome">Nome A-Z</option>
-            <option value="difficolta">Difficoltà</option>
+            <option value="difficolta">Accesso camion</option>
           </select>
         </div>
       </div>
 
       {/* Contatore risultati */}
-      <p className="text-sm text-gray-500 mb-3">
+      <p style={{
+        fontSize: '0.875rem',
+        color: colors.textSecondary,
+        marginBottom: '0.75rem'
+      }}>
         {sortedCantieri.length} cantieri trovati
         {sortedCantieri.length !== cantieri.length && ` (su ${cantieri.length} totali)`}
       </p>
@@ -117,7 +166,7 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
       {/* Lista cantieri */}
       <div className="flex-1 overflow-y-auto space-y-3">
         {sortedCantieri.length === 0 ? (
-          <div className="text-center py-12 text-gray-400">
+          <div className="text-center py-12" style={{ color: colors.textMuted }}>
             <p className="text-lg">Nessun cantiere trovato</p>
             <p className="text-sm">Modifica i filtri o aggiungi un nuovo cantiere</p>
           </div>
@@ -125,15 +174,32 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
           sortedCantieri.map((cantiere, index) => (
             <div
               key={cantiere.id}
-              className="cantiere-card stagger-item border border-gray-200 rounded-lg p-4 cursor-pointer bg-white"
+              className="cantiere-card stagger-item cursor-pointer"
               onClick={() => onCantiereClick && onCantiereClick(cantiere)}
-              style={{ animationDelay: `${index * 0.05}s` }}
+              style={{
+                border: `1px solid ${colors.border}`,
+                borderRadius: '0.5rem',
+                padding: '1rem',
+                backgroundColor: colors.surface,
+                animationDelay: `${index * 0.05}s`
+              }}
             >
               {/* Header card */}
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg text-gray-900">{cantiere.nome}</h3>
-                  <p className="text-sm text-gray-600">{cantiere.indirizzo}</p>
+                  <h3 style={{
+                    fontWeight: 'bold',
+                    fontSize: '1.125rem',
+                    color: colors.textPrimary
+                  }}>
+                    {cantiere.nome}
+                  </h3>
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: colors.textSecondary
+                  }}>
+                    {cantiere.indirizzo}
+                  </p>
                 </div>
 
                 {/* Badges */}
@@ -167,25 +233,33 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
               {/* Info */}
               <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm mb-3">
                 <div>
-                  <span className="text-gray-500">Tipologia:</span>{' '}
-                  <span className="font-medium">{cantiere.tipologia}</span>
+                  <span style={{ color: colors.textSecondary }}>Tipologia:</span>{' '}
+                  <span className="font-medium" style={{ color: colors.textPrimary }}>
+                    {cantiere.tipologia}
+                  </span>
                 </div>
                 {cantiere.cliente && (
                   <div>
-                    <span className="text-gray-500">Cliente:</span>{' '}
-                    <span className="font-medium">{cantiere.cliente}</span>
+                    <span style={{ color: colors.textSecondary }}>Cliente:</span>{' '}
+                    <span className="font-medium" style={{ color: colors.textPrimary }}>
+                      {cantiere.cliente}
+                    </span>
                   </div>
                 )}
                 {cantiere.orari && (
                   <div>
-                    <span className="text-gray-500">Orari:</span>{' '}
-                    <span className="font-medium">{cantiere.orari}</span>
+                    <span style={{ color: colors.textSecondary }}>Orari:</span>{' '}
+                    <span className="font-medium" style={{ color: colors.textPrimary }}>
+                      {cantiere.orari}
+                    </span>
                   </div>
                 )}
                 {cantiere.coordinatore_nome && (
                   <div>
-                    <span className="text-gray-500">Coordinatore:</span>{' '}
-                    <span className="font-medium">{cantiere.coordinatore_nome}</span>
+                    <span style={{ color: colors.textSecondary }}>Coordinatore:</span>{' '}
+                    <span className="font-medium" style={{ color: colors.textPrimary }}>
+                      {cantiere.coordinatore_nome}
+                    </span>
                   </div>
                 )}
               </div>
@@ -199,13 +273,26 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
               )}
 
               {/* Bottoni azioni */}
-              <div className="flex gap-2 pt-3 border-t border-gray-100">
+              <div className="flex gap-2 pt-3" style={{ borderTop: `1px solid ${colors.border}` }}>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleNavigate(cantiere);
                   }}
-                  className="flex-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded transition"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem 0.75rem',
+                    backgroundColor: colors.success,
+                    color: colors.textWhite,
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    borderRadius: '0.25rem',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s'
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = colors.successHover}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = colors.success}
                 >
                   🧭 Naviga
                 </button>
@@ -215,7 +302,18 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
                     e.stopPropagation();
                     handleCopyLink(cantiere);
                   }}
-                  className="flex-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded transition"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem 0.75rem',
+                    backgroundColor: colors.info,
+                    color: colors.textWhite,
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    borderRadius: '0.25rem',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s'
+                  }}
                 >
                   📋 Copia
                 </button>
@@ -226,7 +324,19 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
                       e.stopPropagation();
                       onEdit(cantiere);
                     }}
-                    className="px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold rounded transition"
+                    style={{
+                      padding: '0.5rem 0.75rem',
+                      backgroundColor: colors.buttonInactiveBg,
+                      color: colors.buttonInactiveText,
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      borderRadius: '0.25rem',
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s'
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = colors.buttonHover}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = colors.buttonInactiveBg}
                   >
                     ✏️
                   </button>
@@ -240,7 +350,19 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
                         onDelete(cantiere.id);
                       }
                     }}
-                    className="px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded transition"
+                    style={{
+                      padding: '0.5rem 0.75rem',
+                      backgroundColor: colors.danger,
+                      color: colors.textWhite,
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      borderRadius: '0.25rem',
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s'
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = colors.dangerHover}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = colors.danger}
                   >
                     🗑️
                   </button>

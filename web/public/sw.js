@@ -1,12 +1,13 @@
-// Service Worker per PWA - Versione 1.1.0
-const CACHE_NAME = 'cantieri-app-v1';
+// Service Worker per PWA - Versione 1.2.0
+const CACHE_NAME = 'cantieri-app-v2';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
   '/vite.svg',
-  '/logo-general-beton.svg',
-  '/general-beton.png'
+  '/betoniera.png',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 // Installazione Service Worker

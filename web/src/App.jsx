@@ -6,8 +6,16 @@ import CantieriList from './components/CantieriList';
 import CantiereForm from './components/CantiereForm';
 import NoteAutisti from './components/NoteAutisti';
 import Header from './components/Header';
+import Settings from './components/Settings';
+import { useTheme } from './context/ThemeContext';
 
 function App() {
+  const { colors } = useTheme();
+
+  // PWA Install Prompt State
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+
   // Stato autenticazione
   const [user, setUser] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -17,10 +25,48 @@ function App() {
   const [isLoadingCantieri, setIsLoadingCantieri] = useState(true);
 
   // UI State
-  const [view, setView] = useState('list'); // 'list' | 'map' | 'add' | 'edit' | 'detail'
+  const [view, setView] = useState(() => {
+    // Check hash URL for settings route
+    const hash = window.location.hash.replace('#', '');
+    return hash === 'settings' ? 'settings' : 'map';
+  });
   const [selectedCantiere, setSelectedCantiere] = useState(null);
   const [clickedCoordinates, setClickedCoordinates] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Listen to hash changes for settings route
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'settings') {
+        setView('settings');
+      } else if (hash === '') {
+        setView('map');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // PWA Install Prompt Handler
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      // Previeni il mini-infobar default del browser
+      e.preventDefault();
+      // Salva l'evento per usarlo dopo
+      setDeferredPrompt(e);
+      // Mostra il banner custom solo se non è già installata
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      if (!isStandalone) {
+        // Aspetta 2 secondi prima di mostrare il banner
+        setTimeout(() => setShowInstallBanner(true), 2000);
+      }
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+  }, []);
 
   // Login form
   const [email, setEmail] = useState('');
@@ -130,13 +176,49 @@ function App() {
     setView('detail');
   };
 
+  // Install PWA
+  const handleInstallPWA = async () => {
+    if (!deferredPrompt) return;
+
+    // Mostra il prompt di installazione
+    deferredPrompt.prompt();
+
+    // Aspetta la risposta dell'utente
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`PWA installation outcome: ${outcome}`);
+
+    // Resetta il prompt
+    setDeferredPrompt(null);
+    setShowInstallBanner(false);
+  };
+
+  // Dismiss PWA banner
+  const handleDismissBanner = () => {
+    setShowInstallBanner(false);
+    // Salva in localStorage per non mostrarlo di nuovo per 7 giorni
+    localStorage.setItem('pwa-banner-dismissed', Date.now().toString());
+  };
+
   // Loading
   if (isAuthLoading || isLoadingCantieri) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Caricamento...</p>
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: colors.background,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            animation: 'spin 1s linear infinite',
+            borderRadius: '50%',
+            height: '64px',
+            width: '64px',
+            borderBottom: `2px solid ${colors.primary}`,
+            margin: '0 auto 16px'
+          }}></div>
+          <p style={{ color: colors.textSecondary }}>Caricamento...</p>
         </div>
       </div>
     );
@@ -243,28 +325,131 @@ function App() {
 
   // Main app UI
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: colors.background,
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
       {/* Header con menu mobile responsive */}
       <Header user={user} onLogout={handleLogout} view={view} setView={setView} />
 
+      {/* PWA Install Banner - mostra solo su mobile */}
+      {showInstallBanner && deferredPrompt && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '1rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            width: 'calc(100% - 2rem)',
+            maxWidth: '500px',
+            backgroundColor: colors.surface,
+            borderRadius: '1rem',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+            padding: '1rem',
+            border: `2px solid ${colors.primary}`,
+            animation: 'slideInUp 0.4s ease-out'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              backgroundColor: colors.primary,
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <span style={{ fontSize: '1.5rem' }}>📱</span>
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{
+                fontWeight: 'bold',
+                color: colors.textPrimary,
+                marginBottom: '0.25rem',
+                fontSize: '0.95rem'
+              }}>
+                Installa General Beton
+              </p>
+              <p style={{
+                fontSize: '0.8rem',
+                color: colors.textSecondary,
+                lineHeight: '1.3'
+              }}>
+                Aggiungi l'app alla schermata home per accesso rapido
+              </p>
+            </div>
+          </div>
+          <div style={{
+            display: 'flex',
+            gap: '0.5rem',
+            marginTop: '1rem'
+          }}>
+            <button
+              onClick={handleInstallPWA}
+              style={{
+                flex: 1,
+                padding: '0.75rem',
+                backgroundColor: colors.primary,
+                color: colors.textWhite,
+                borderRadius: '0.5rem',
+                border: 'none',
+                fontWeight: 'bold',
+                fontSize: '0.9rem',
+                cursor: 'pointer'
+              }}
+            >
+              Installa
+            </button>
+            <button
+              onClick={handleDismissBanner}
+              style={{
+                padding: '0.75rem 1rem',
+                backgroundColor: colors.buttonInactiveBg,
+                color: colors.textSecondary,
+                borderRadius: '0.5rem',
+                border: 'none',
+                fontSize: '0.9rem',
+                cursor: 'pointer'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Main content */}
-      <main className="flex-1 container mx-auto px-4 py-6">
+      <main style={{ flex: 1 }} className="container mx-auto px-4 py-6">
+        {/* Vista Settings */}
+        {view === 'settings' && (
+          <div className="view-transition">
+            <Settings />
+          </div>
+        )}
+
         {/* Vista Lista */}
         {view === 'list' && (
-          <CantieriList
-            cantieri={cantieri}
-            onCantiereClick={handleCantiereClick}
-            onEdit={!user.isGuest ? (cantiere) => {
-              setSelectedCantiere(cantiere);
-              setView('edit');
-            } : undefined}
-            onDelete={!user.isGuest ? handleDeleteCantiere : undefined}
-          />
+          <div className="view-transition">
+            <CantieriList
+              cantieri={cantieri}
+              onCantiereClick={handleCantiereClick}
+              onEdit={!user.isGuest ? (cantiere) => {
+                setSelectedCantiere(cantiere);
+                setView('edit');
+              } : undefined}
+              onDelete={!user.isGuest ? handleDeleteCantiere : undefined}
+            />
+          </div>
         )}
 
         {/* Vista Mappa */}
         {view === 'map' && (
-          <div className="h-[calc(100vh-180px)]">
+          <div className="h-[calc(100vh-180px)] view-transition">
             <MapView
               cantieri={cantieri}
               onCantiereClick={handleCantiereClick}
@@ -275,7 +460,8 @@ function App() {
 
         {/* Form Aggiungi Cantiere */}
         {view === 'add' && !user.isGuest && (
-          <CantiereForm
+          <div className="view-transition">
+            <CantiereForm
             initialCoordinates={clickedCoordinates}
             onSubmit={handleCreateCantiere}
             onCancel={() => {
@@ -284,24 +470,27 @@ function App() {
             }}
             isLoading={isSubmitting}
           />
+          </div>
         )}
 
         {/* Form Modifica Cantiere */}
         {view === 'edit' && selectedCantiere && !user.isGuest && (
-          <CantiereForm
-            initialData={selectedCantiere}
-            onSubmit={handleUpdateCantiere}
-            onCancel={() => {
-              setView('list');
-              setSelectedCantiere(null);
-            }}
-            isLoading={isSubmitting}
-          />
+          <div className="view-transition">
+            <CantiereForm
+              initialData={selectedCantiere}
+              onSubmit={handleUpdateCantiere}
+              onCancel={() => {
+                setView('list');
+                setSelectedCantiere(null);
+              }}
+              isLoading={isSubmitting}
+            />
+          </div>
         )}
 
         {/* Dettaglio Cantiere */}
         {view === 'detail' && selectedCantiere && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 view-transition">
             {/* Colonna sinistra: Dettagli cantiere */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <div className="flex items-start justify-between mb-4">
@@ -413,8 +602,15 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-4">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-600">
+      <footer style={{
+        backgroundColor: colors.surface,
+        borderTop: `1px solid ${colors.border}`,
+        padding: '1rem 0'
+      }}>
+        <div className="container mx-auto px-4 text-center" style={{
+          fontSize: '0.875rem',
+          color: colors.textSecondary
+        }}>
           <p>General Beton v1.0 • Gestione Cantieri</p>
         </div>
       </footer>

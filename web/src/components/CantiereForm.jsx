@@ -285,7 +285,7 @@ export default function CantiereForm({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Difficoltà Accesso
+                Accesso camion
               </label>
               <select
                 {...register('difficolta')}

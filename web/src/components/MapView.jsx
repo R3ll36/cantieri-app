@@ -11,7 +11,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-// Icone colorate per difficoltà
+// Icone colorate per accesso camion
 const createColoredIcon = (color) => {
   return new L.Icon({
     iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
@@ -70,7 +70,7 @@ export default function MapView({
   const [selectedCantiere, setSelectedCantiere] = useState(null);
   const [tempMarker, setTempMarker] = useState(null); // Marker temporaneo per nuovo cantiere
 
-  // Determina icona in base a difficoltà e stato
+  // Determina icona in base ad accesso camion e stato
   const getIcon = (cantiere) => {
     if (cantiere.stato === 'Completato') {
       return icons.Completato;
@@ -154,7 +154,7 @@ export default function MapView({
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold">Difficoltà:</span>
+                    <span className="font-semibold">Accesso camion:</span>
                     <span
                       className={`px-2 py-0.5 rounded text-xs font-semibold ${
                         cantiere.difficolta === 'Difficile'
@@ -224,13 +224,6 @@ export default function MapView({
                     <p className="text-xs text-yellow-900">{cantiere.note_operative}</p>
                   </div>
                 )}
-
-                <button
-                  onClick={() => handleMarkerClick(cantiere)}
-                  className="mt-3 w-full bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold py-1.5 px-3 rounded transition"
-                >
-                  Vedi dettagli
-                </button>
               </div>
             </Popup>
           </Marker>
