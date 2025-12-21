@@ -64,6 +64,28 @@ function App() {
       }
     };
 
+    // Controlla se già installata
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    const wasDismissed = localStorage.getItem('pwa-banner-dismissed');
+    const dismissedTime = wasDismissed ? parseInt(wasDismissed) : 0;
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+    const isDismissedRecently = Date.now() - dismissedTime < sevenDays;
+
+    // Se non è installata, non è stata dismissata di recente, e siamo su mobile, mostra il banner
+    if (!isStandalone && !isDismissedRecently) {
+      // Mostra banner dopo 3 secondi per dare tempo al beforeinstallprompt
+      setTimeout(() => {
+        // Se siamo su iOS Safari (non supporta beforeinstallprompt)
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        if (isIOS || (isMobile && !deferredPrompt)) {
+          // Mostra banner anche senza deferredPrompt (per iOS e mobile senza supporto)
+          setShowInstallBanner(true);
+        }
+      }, 3000);
+    }
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
   }, []);
@@ -178,9 +200,31 @@ function App() {
 
   // Install PWA
   const handleInstallPWA = async () => {
-    if (!deferredPrompt) return;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-    // Mostra il prompt di installazione
+    if (isIOS) {
+      // Su iOS, mostra istruzioni per aggiungere manualmente
+      alert(
+        '📱 Per installare su iPhone/iPad:\n\n' +
+        '1. Tap sul pulsante Condividi (icona quadrato con freccia) ⬆️\n' +
+        '2. Scorri e tap su "Aggiungi a Home" 🏠\n' +
+        '3. Tap "Aggiungi" in alto a destra ✅'
+      );
+      setShowInstallBanner(false);
+      return;
+    }
+
+    if (!deferredPrompt) {
+      // Android/Mobile senza supporto prompt
+      alert(
+        '📱 Per installare l\'app:\n\n' +
+        'Apri il menu del browser (⋮) e seleziona "Aggiungi a schermata Home" o "Installa app"'
+      );
+      setShowInstallBanner(false);
+      return;
+    }
+
+    // Android con supporto nativo
     deferredPrompt.prompt();
 
     // Aspetta la risposta dell'utente
@@ -334,8 +378,8 @@ function App() {
       {/* Header con menu mobile responsive */}
       <Header user={user} onLogout={handleLogout} view={view} setView={setView} />
 
-      {/* PWA Install Banner - mostra solo su mobile */}
-      {showInstallBanner && deferredPrompt && (
+      {/* PWA Install Banner - mostra su mobile e desktop */}
+      {showInstallBanner && (
         <div
           style={{
             position: 'fixed',
