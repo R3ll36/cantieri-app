@@ -265,10 +265,10 @@ export default function MapView({
       {/* Istruzioni mappa (responsive: desktop vs mobile) */}
       {onMapClick && !tempMarker && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg z-[1000] animate-pulse">
-          {/* Desktop: Click destro */}
-          <p className="hidden sm:block text-sm font-semibold">🖱️ Click destro sulla mappa per aggiungere un cantiere</p>
-          {/* Mobile: Tap prolungato */}
-          <p className="sm:hidden text-sm font-semibold">👆 Tap prolungato sulla mappa per aggiungere un cantiere</p>
+          {/* Desktop: Click destro (>= 768px) */}
+          <p className="hidden md:block text-sm font-semibold">🖱️ Click destro sulla mappa per aggiungere un cantiere</p>
+          {/* Mobile: Tap prolungato (< 768px) */}
+          <p className="md:hidden text-sm font-semibold">👆 Tap prolungato sulla mappa per aggiungere un cantiere</p>
         </div>
       )}
     </div>

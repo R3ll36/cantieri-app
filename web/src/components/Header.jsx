@@ -112,7 +112,7 @@ export default function Header({ user, onLogout, view, setView }) {
             style={{
               backgroundColor: colors.buttonInactiveBg,
               color: colors.buttonInactiveText,
-              padding: '0.5rem 1rem',
+              padding: '0.5rem 0.75rem',
               borderRadius: '0.5rem',
               fontWeight: '600',
               transition: 'all 0.2s',
@@ -121,7 +121,8 @@ export default function Header({ user, onLogout, view, setView }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: '38px'
+              height: '38px',
+              width: '38px'
             }}
             onMouseEnter={(e) => {
               e.target.style.backgroundColor = colors.buttonHover;
@@ -131,7 +132,7 @@ export default function Header({ user, onLogout, view, setView }) {
             }}
             title={isDarkMode ? 'Modalità chiara' : 'Modalità scura'}
           >
-            <span style={{ fontSize: '1.25rem', lineHeight: 1 }}>
+            <span style={{ fontSize: '1.1rem', lineHeight: 1 }}>
               {isDarkMode ? '☀️' : '🌙'}
             </span>
           </button>
