@@ -21,8 +21,8 @@ export default function Header({ user, onLogout, view, setView }) {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          {/* Immagine logo 100x70px */}
-          <div className="w-[100px] h-[70px] flex items-center justify-center overflow-hidden">
+          {/* Immagine logo: su mobile 100x70px, su desktop più piccolo (max 80px) */}
+          <div className="w-[100px] h-[70px] md:w-[80px] md:h-[56px] flex items-center justify-center overflow-hidden">
             <img
               src="/general-beton.png" // Usa il PNG invece del SVG
               alt="General Beton Logo"
