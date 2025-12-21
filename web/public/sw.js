@@ -1,5 +1,5 @@
-// Service Worker per PWA - Versione 1.3.0
-const CACHE_NAME = 'cantieri-app-v3';
+// Service Worker per PWA - Versione 1.4.0
+const CACHE_NAME = 'cantieri-app-v4';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -12,11 +12,12 @@ const urlsToCache = [
 
 // Installazione Service Worker
 self.addEventListener('install', (event) => {
+  console.log('[SW] Installing Service Worker v1.4.0');
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('Cache aperta');
+      console.log('[SW] Cache aperta');
       return cache.addAll(urlsToCache).catch((err) => {
-        console.warn('Alcune risorse non sono state memorizzate:', err);
+        console.warn('[SW] Alcune risorse non sono state memorizzate:', err);
       });
     })
   );
@@ -26,12 +27,13 @@ self.addEventListener('install', (event) => {
 
 // Attivazione Service Worker
 self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating Service Worker v1.4.0');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Eliminazione cache vecchia:', cacheName);
+            console.log('[SW] Eliminazione cache vecchia:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -45,47 +47,85 @@ self.addEventListener('activate', (event) => {
 // Intercetta richieste di rete
 self.addEventListener('fetch', (event) => {
   const { request } = event;
+  const url = new URL(request.url);
+
   // Ignora le richieste non GET (es. POST, PUT, DELETE)
   if (request.method !== 'GET') {
-    // Per le richieste non GET, passa direttamente alla rete senza cache
     event.respondWith(fetch(request));
     return;
   }
 
-  // Gestione strategia Cache First con fallback alla rete
+  // Ignora Firebase e richieste esterne
+  if (url.origin !== location.origin) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
+  // NETWORK FIRST per HTML, JS, CSS (file critici che cambiano spesso)
+  const isDocument = request.destination === 'document';
+  const isScript = request.destination === 'script';
+  const isStyle = request.destination === 'style';
+  const isHtml = url.pathname === '/' || url.pathname === '/index.html';
+
+  if (isDocument || isScript || isStyle || isHtml) {
+    // Strategia NETWORK FIRST - prova prima la rete
+    event.respondWith(
+      fetch(request)
+        .then((networkResponse) => {
+          // Se la rete funziona, salva in cache e ritorna
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          // Se la rete fallisce, usa la cache come fallback
+          return caches.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+              console.log('[SW] Serving from cache (offline):', request.url);
+              return cachedResponse;
+            }
+            // Nessuna cache disponibile
+            return new Response('Risorsa non disponibile offline', {
+              status: 503,
+              statusText: 'Service Unavailable',
+              headers: new Headers({ 'Content-Type': 'text/plain' })
+            });
+          });
+        })
+    );
+    return;
+  }
+
+  // CACHE FIRST per immagini e static assets (cambiano raramente)
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
-      // Se la risorsa è in cache, restituiscila
       if (cachedResponse) {
+        // Ritorna dalla cache ma aggiorna in background
+        fetch(request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, networkResponse);
+            });
+          }
+        }).catch(() => {
+          // Ignora errori di rete per assets
+        });
         return cachedResponse;
       }
 
-      // Altrimenti, recupera dalla rete
+      // Non in cache, recupera dalla rete
       return fetch(request).then((networkResponse) => {
-        // Controlla se la risposta è valida per la cache
-        if (
-          networkResponse &&
-          networkResponse.status === 200 &&
-          networkResponse.type === 'basic'
-        ) {
-          // Clona la risposta per memorizzarla in cache
+        if (networkResponse && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, responseToCache).catch((err) => {
-              console.warn('Impossibile memorizzare in cache:', request.url, err);
-            });
+            cache.put(request, responseToCache);
           });
         }
         return networkResponse;
-      }).catch(() => {
-        // Se la rete fallisce e non abbiamo la risorsa in cache,
-        // possiamo restituire una pagina di fallback (opzionale)
-        // Per ora restituiamo undefined (che causa errore)
-        return new Response('Risorsa non disponibile offline', {
-          status: 503,
-          statusText: 'Service Unavailable',
-          headers: new Headers({ 'Content-Type': 'text/plain' })
-        });
       });
     })
   );
