@@ -12,53 +12,65 @@ export default function Header({ user, onLogout, view, setView }) {
     setIsMenuOpen(false); // Chiudi menu dopo la selezione su mobile
   };
 
-  return (
-    <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Logo e hamburger per mobile */}
-        <div className="flex items-center gap-3">
-          {/* Hamburger button - visibile solo su mobile */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-200 focus:outline-none"
-            aria-label="Menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {isMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
 
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-black text-xl" style={{ fontFamily: 'Arial Black, sans-serif' }}>GB</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-800">General Beton</h1>
-              <p className="text-xs text-gray-500">Gestione Cantieri</p>
-            </div>
+  return (
+    <header className="bg-white shadow-md relative">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          {/* Immagine logo 100x70px */}
+          <div className="w-[100px] h-[70px] flex items-center justify-center overflow-hidden">
+            <img
+              src="/general-beton.png" // Usa il PNG invece del SVG
+              alt="General Beton Logo"
+              className="w-full h-full object-contain"
+              onError={(e) => {
+                // Fallback se l'immagine non esiste
+                e.target.onerror = null;
+                e.target.src = '/logo-general-beton.svg'; // Fallback al SVG
+              }}
+            />
+          </div>
+          {/* Testo visibile solo su desktop */}
+          <div className="hidden md:block">
+            <h1 className="text-xl font-bold text-gray-800">General Beton</h1>
+            <p className="text-xs text-gray-500">Gestione Cantieri</p>
           </div>
         </div>
+
+        {/* Hamburger button a destra - visibile solo su mobile */}
+        <button
+          onClick={toggleMenu}
+          className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-200 focus:outline-none"
+          aria-label="Menu"
+        >
+          <svg
+            className="w-8 h-8"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {isMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
 
         {/* Navigation desktop - visibile solo su schermi medi e grandi */}
         <div className="hidden md:flex items-center gap-3">
@@ -106,52 +118,86 @@ export default function Header({ user, onLogout, view, setView }) {
           </div>
         </div>
 
-        {/* Menu mobile - visibile solo quando isMenuOpen è true */}
+        {/* Menu mobile a schermo intero */}
         {isMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white shadow-lg z-50 md:hidden">
-            <div className="flex flex-col p-4 space-y-3 border-t border-gray-200">
+          <div className="fixed inset-0 bg-white z-50 md:hidden flex flex-col">
+            {/* Header del menu con X per chiudere */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-white font-black text-xl" style={{ fontFamily: 'Arial Black, sans-serif' }}>GB</span>
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-gray-800">Menu</h2>
+                </div>
+              </div>
+              <button
+                onClick={closeMenu}
+                className="p-2 rounded-full hover:bg-gray-200"
+                aria-label="Chiudi menu"
+              >
+                <svg
+                  className="w-8 h-8 text-gray-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Voci del menu una sotto l'altra */}
+            <div className="flex-1 flex flex-col p-6 space-y-4 overflow-y-auto">
               <button
                 onClick={() => handleViewChange('list')}
-                className={`px-4 py-3 rounded-lg font-semibold text-left transition ${
+                className={`px-6 py-4 rounded-xl font-semibold text-left text-lg transition ${
                   view === 'list'
                     ? 'bg-red-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                 }`}
               >
-                Lista
+                📋 Lista Cantieri
               </button>
 
               <button
                 onClick={() => handleViewChange('map')}
-                className={`px-4 py-3 rounded-lg font-semibold text-left transition ${
+                className={`px-6 py-4 rounded-xl font-semibold text-left text-lg transition ${
                   view === 'map'
                     ? 'bg-red-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                 }`}
               >
-                Mappa
+                🗺️ Mappa
               </button>
 
               {!user?.isGuest && (
                 <button
                   onClick={() => handleViewChange('add')}
-                  className="px-4 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition text-left"
+                  className="px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl text-left text-lg transition"
                 >
-                  Nuovo Cantiere
+                  ➕ Nuovo Cantiere
                 </button>
               )}
 
-              <div className="pt-3 border-t border-gray-300">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-gray-600">
-                    {user?.isGuest ? 'Ospite' : user.email}
-                  </span>
+              <div className="mt-8 pt-8 border-t border-gray-300">
+                <div className="mb-6">
+                  <p className="text-sm text-gray-500 mb-2">Accesso come</p>
+                  <p className="text-lg font-medium text-gray-800">
+                    {user?.isGuest ? '👤 Ospite' : user.email}
+                  </p>
                 </div>
                 <button
                   onClick={onLogout}
-                  className="w-full px-4 py-3 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition"
+                  className="w-full px-6 py-4 bg-red-500 hover:bg-red-600 text-white text-lg font-semibold rounded-xl transition"
                 >
-                  Esci
+                  🚪 Esci
                 </button>
               </div>
             </div>
