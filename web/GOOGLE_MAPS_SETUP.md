@@ -12,6 +12,8 @@ Per abilitare la barra di ricerca sulla mappa, devi configurare una API Key di G
 4. Click su "Create Credentials" → "API Key"
 5. Copia la tua API key
 
+AIzaSyCQYlkWzqIWo_Elzz6MB8iC16Sd7Z9jMy8
+
 ### 2. Abilita le API necessarie
 
 Nel Google Cloud Console, vai su "APIs & Services" → "Library" e abilita:

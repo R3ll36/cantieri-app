@@ -1,12 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
 
     <!-- Meta tags base -->
     <title>General Beton - Gestione Cantieri Pompe Calcestruzzo</title>
-    <meta name="description" content="App General Beton per gestione cantieri e navigazione per autisti pompe calcestruzzo. Visualizza cantieri, note operative, e naviga con Google Maps." />
+    <meta
+      name="description"
+      content="App General Beton per gestione cantieri e navigazione per autisti pompe calcestruzzo. Visualizza cantieri, note operative, e naviga con Google Maps."
+    />
     <meta name="theme-color" content="#dc2626" />
 
     <!-- Favicon -->
@@ -17,7 +23,10 @@
 
     <!-- Apple iOS PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <meta name="apple-mobile-web-app-title" content="General Beton" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icon-192.png" />
@@ -30,23 +39,26 @@
     <!-- Microsoft Windows -->
     <meta name="msapplication-TileColor" content="#dc2626" />
     <meta name="msapplication-TileImage" content="/icon-192.png" />
-
   </head>
   <body>
     <div id="root"></div>
 
     <!-- Google Maps API con Places Library -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHmT0n4gY8YqK_example_replace_this&libraries=places&language=it&region=IT"></script>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQYlkWzqIWo_Elzz6MB8iC16Sd7Z9jMy8&libraries=places&language=it&region=IT"
+    ></script>
 
     <script type="module" src="/src/main.jsx"></script>
 
     <!-- Registrazione Service Worker per PWA -->
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").then(
             (registration) => {
-              console.log('✅ Service Worker registrato:', registration.scope);
+              console.log("✅ Service Worker registrato:", registration.scope);
 
               // Controlla aggiornamenti ogni 60 secondi
               setInterval(() => {
@@ -54,13 +66,18 @@
               }, 60000);
 
               // Ascolta aggiornamenti
-              registration.addEventListener('updatefound', () => {
+              registration.addEventListener("updatefound", () => {
                 const newWorker = registration.installing;
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                newWorker.addEventListener("statechange", () => {
+                  if (
+                    newWorker.state === "installed" &&
+                    navigator.serviceWorker.controller
+                  ) {
                     // Nuovo contenuto disponibile, ricarica automaticamente
-                    if (confirm('Nuova versione disponibile! Vuoi ricaricare?')) {
-                      newWorker.postMessage({ type: 'SKIP_WAITING' });
+                    if (
+                      confirm("Nuova versione disponibile! Vuoi ricaricare?")
+                    ) {
+                      newWorker.postMessage({ type: "SKIP_WAITING" });
                       window.location.reload();
                     }
                   }
@@ -68,7 +85,7 @@
               });
             },
             (error) => {
-              console.error('❌ Errore registrazione Service Worker:', error);
+              console.error("❌ Errore registrazione Service Worker:", error);
             }
           );
         });
@@ -76,33 +93,39 @@
 
       // PWA Install Prompt - permetti installazione nativa
       let deferredPrompt;
-      window.addEventListener('beforeinstallprompt', (e) => {
+      window.addEventListener("beforeinstallprompt", (e) => {
         // Salva l'evento per poterlo usare dopo
         deferredPrompt = e;
-        console.log('PWA installabile - banner nativo del browser disponibile');
+        console.log("PWA installabile - banner nativo del browser disponibile");
       });
 
       window.installPWA = async () => {
         if (!deferredPrompt) return;
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        console.log('User choice:', outcome);
+        console.log("User choice:", outcome);
         deferredPrompt = null;
         closePWABanner();
       };
 
       window.closePWABanner = () => {
-        const banner = document.getElementById('pwa-install-banner');
+        const banner = document.getElementById("pwa-install-banner");
         if (banner) {
-          banner.style.animation = 'slideDown 0.3s ease-in';
+          banner.style.animation = "slideDown 0.3s ease-in";
           setTimeout(() => banner.remove(), 300);
         }
       };
     </script>
     <style>
       @keyframes slideDown {
-        from { transform: translateX(-50%) translateY(0); opacity: 1; }
-        to { transform: translateX(-50%) translateY(100px); opacity: 0; }
+        from {
+          transform: translateX(-50%) translateY(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(-50%) translateY(100px);
+          opacity: 0;
+        }
       }
     </style>
   </body>
