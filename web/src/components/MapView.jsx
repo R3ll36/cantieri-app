@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import MapSearchBar from './MapSearchBar';
+
+// Componente helper per ottenere riferimento alla mappa
+function MapRefSetter({ mapRef }) {
+  const map = useMap();
+  useEffect(() => {
+    mapRef.current = map;
+  }, [map, mapRef]);
+  return null;
+}
 
 // Fix per icone Leaflet che non si vedono di default in Vite
 delete L.Icon.Default.prototype._getIconUrl;
@@ -69,6 +79,7 @@ export default function MapView({
 }) {
   const [selectedCantiere, setSelectedCantiere] = useState(null);
   const [tempMarker, setTempMarker] = useState(null); // Marker temporaneo per nuovo cantiere
+  const mapRef = useRef(null);
 
   // Determina icona in base ad accesso camion e stato
   const getIcon = (cantiere) => {
@@ -103,14 +114,35 @@ export default function MapView({
     setTempMarker(null);
   };
 
+  // Gestisce selezione da barra di ricerca
+  const handleSearchLocationSelect = (location) => {
+    if (mapRef.current) {
+      // Centra la mappa sulla posizione selezionata
+      mapRef.current.setView([location.lat, location.lng], 16);
+
+      // Aggiungi marker temporaneo
+      setTempMarker({
+        lat: location.lat,
+        lng: location.lng,
+        address: location.address
+      });
+    }
+  };
+
   return (
     <div className="w-full h-full relative">
+      {/* Barra di ricerca */}
+      <MapSearchBar onLocationSelect={handleSearchLocationSelect} />
+
       <MapContainer
         center={[center.lat, center.lng]}
         zoom={zoom}
         className="w-full h-full"
         scrollWheelZoom={true}
       >
+        {/* Setter per riferimento mappa */}
+        <MapRefSetter mapRef={mapRef} />
+
         {/* Tile Layer - OpenStreetMap (strade ben visibili) */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
