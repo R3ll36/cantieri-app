@@ -53,9 +53,15 @@ function MapClickHandler({ onMapClick, onRightClick }) {
     contextmenu(e) {
       // Right-click sulla mappa
       if (onRightClick) {
-        e.originalEvent.preventDefault(); // Previene menu contestuale browser
+        // Previeni menu contestuale del browser in tutti i modi possibili
+        if (e.originalEvent) {
+          e.originalEvent.preventDefault();
+          e.originalEvent.stopPropagation();
+        }
+        e.preventDefault?.();
         onRightClick(e.latlng);
       }
+      return false;
     },
   });
   return null;
@@ -128,6 +134,22 @@ export default function MapView({
       });
     }
   };
+
+  // Previeni menu contestuale del browser sulla mappa (Windows Chrome fix)
+  useEffect(() => {
+    const mapContainer = document.querySelector('.leaflet-container');
+    if (mapContainer && onMapClick) {
+      const handleContextMenu = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      };
+      mapContainer.addEventListener('contextmenu', handleContextMenu);
+      return () => {
+        mapContainer.removeEventListener('contextmenu', handleContextMenu);
+      };
+    }
+  }, [onMapClick]);
 
   return (
     <div className="w-full h-full relative">

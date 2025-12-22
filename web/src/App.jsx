@@ -160,6 +160,12 @@ function App() {
 
   // Logout handler
   const handleLogout = async () => {
+    // Se l'utente è ospite, semplicemente rimuovi lo stato
+    if (user?.isGuest) {
+      setUser(null);
+      return;
+    }
+    // Altrimenti fai logout da Firebase
     await logout();
   };
 
