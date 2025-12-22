@@ -1,5 +1,5 @@
-// Service Worker per PWA - Versione 1.9.0
-const CACHE_NAME = 'cantieri-app-v9-0';
+// Service Worker per PWA - Versione 2.0.0
+const CACHE_NAME = 'cantieri-app-v2-0-0';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -12,7 +12,7 @@ const urlsToCache = [
 
 // Installazione Service Worker
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing Service Worker v1.9.0');
+  console.log('[SW] Installing Service Worker v2.0.0');
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[SW] Cache aperta');
@@ -27,7 +27,7 @@ self.addEventListener('install', (event) => {
 
 // Attivazione Service Worker
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating Service Worker v1.9.0');
+  console.log('[SW] Activating Service Worker v2.0.0');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
