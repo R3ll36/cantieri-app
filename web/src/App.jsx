@@ -513,10 +513,10 @@ function App() {
       )}
 
       {/* Main content */}
-      <main style={{ flex: 1, overflow: 'hidden' }}>
+      <main style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
         {/* Vista Mappa - FULL WIDTH senza padding */}
         {view === 'map' && (
-          <div style={{ height: '100%', width: '100%' }} className="view-transition">
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} className="view-transition">
             <MapView
               cantieri={cantieri}
               onCantiereClick={handleCantiereClick}
