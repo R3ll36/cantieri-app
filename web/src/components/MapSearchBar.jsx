@@ -107,41 +107,30 @@ export default function MapSearchBar({ onLocationSelect }) {
               <div className="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full"></div>
             </div>
           )}
-
-          {/* Pulsante cancella */}
-          {searchQuery && !isLoading && (
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setPredictions([]);
-              }}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 font-bold"
-              style={{ fontSize: '18px' }}
-            >
-              ✕
-            </button>
-          )}
         </div>
 
         {/* Lista suggerimenti */}
         {predictions.length > 0 && (
-          <div className="absolute w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-80 overflow-y-auto">
-            {predictions.map((prediction) => (
+          <div className="absolute w-full mt-2 bg-white rounded-xl shadow-2xl border-2 border-blue-200 max-h-96 overflow-y-auto backdrop-blur-sm">
+            {predictions.map((prediction, index) => (
               <button
                 key={prediction.place_id}
                 onClick={() => handleSelectPlace(prediction.place_id, prediction.description)}
-                className="w-full px-4 py-3 text-left hover:bg-blue-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                className="w-full px-5 py-4 text-left hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 border-b border-gray-100 last:border-b-0 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl active:scale-[0.98]"
               >
-                <div className="flex items-start gap-2">
-                  <span className="text-blue-500 text-lg mt-0.5">📍</span>
-                  <div className="flex-1">
-                    <p className="text-gray-900 font-medium text-sm">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-md">
+                    <span className="text-white text-base">📍</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-900 font-semibold text-base truncate">
                       {prediction.structured_formatting.main_text}
                     </p>
-                    <p className="text-gray-500 text-xs mt-0.5">
+                    <p className="text-gray-500 text-sm mt-1 line-clamp-2">
                       {prediction.structured_formatting.secondary_text}
                     </p>
                   </div>
+                  <div className="flex-shrink-0 text-blue-400 text-xl self-center">→</div>
                 </div>
               </button>
             ))}

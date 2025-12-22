@@ -165,10 +165,12 @@ export default function MapView({
         {/* Setter per riferimento mappa */}
         <MapRefSetter mapRef={mapRef} />
 
-        {/* Tile Layer - OpenStreetMap (strade ben visibili) */}
+        {/* Tile Layer - Stile Apple Maps (colori chiari e moderni) */}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          subdomains="abcd"
+          maxZoom={20}
         />
 
         {/* Handler per click/right-click su mappa */}
@@ -302,9 +304,9 @@ export default function MapView({
         )}
       </MapContainer>
 
-      {/* Istruzioni mappa (responsive: desktop vs mobile) - Sotto la barra di ricerca */}
+      {/* Istruzioni mappa (responsive: desktop vs mobile) - Angolo in basso a destra */}
       {onMapClick && !tempMarker && (
-        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg z-[999] animate-pulse">
+        <div className="absolute bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg z-[999] animate-pulse">
           {/* Desktop: Click destro (>= 768px) */}
           <p className="hidden md:block text-sm font-semibold">🖱️ Click destro sulla mappa per aggiungere un cantiere</p>
           {/* Mobile: Tap prolungato (< 768px) */}

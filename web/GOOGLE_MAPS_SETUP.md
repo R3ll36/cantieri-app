@@ -14,6 +14,10 @@ Per abilitare la barra di ricerca sulla mappa, devi configurare una API Key di G
 
 ### 2. Abilita le API necessarie
 
+il messaggio click destra sula mappa deve stare in basso a dx nel angolo
+quando cerco un indirizzo si apre la tendina con li indirizzi, migliora il design degli risultati e togli la X perche quando faccio click sulla mappa i risultati ricerca sparisce,
+migliora i colori della mappa, devono avere i colori di Apple maps,
+
 Nel Google Cloud Console, vai su "APIs & Services" → "Library" e abilita:
 
 - **Maps JavaScript API**
