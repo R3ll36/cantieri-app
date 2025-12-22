@@ -154,21 +154,6 @@ export default function MapView({
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold">Accesso camion:</span>
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                        cantiere.difficolta === 'Difficile'
-                          ? 'bg-red-100 text-red-800'
-                          : cantiere.difficolta === 'Medio'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-green-100 text-green-800'
-                      }`}
-                    >
-                      {cantiere.difficolta}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
                     <span className="font-semibold">Stato:</span>
                     <span
                       className={`px-2 py-0.5 rounded text-xs font-semibold ${
@@ -182,6 +167,14 @@ export default function MapView({
                       {cantiere.stato}
                     </span>
                   </div>
+
+                  {/* Metri Cubi da Fare Oggi - solo se > 0 */}
+                  {cantiere.metri_cubi_oggi > 0 && (
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">🎯 Metri Cubi da Fare Oggi:</span>
+                      <span className="text-blue-600 font-bold">{parseFloat(cantiere.metri_cubi_oggi).toFixed(1)} m³</span>
+                    </div>
+                  )}
 
                   {cantiere.orari && (
                     <div className="flex items-center gap-2">
@@ -207,13 +200,6 @@ export default function MapView({
                       >
                         {cantiere.coordinatore_telefono}
                       </a>
-                    </div>
-                  )}
-
-                  {cantiere.created_by && (
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold">Pubblicato da:</span>
-                      <span className="text-gray-700">{cantiere.created_by}</span>
                     </div>
                   )}
                 </div>

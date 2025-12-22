@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Settings from './components/Settings';
 import IOSInstallPrompt from './components/IOSInstallPrompt';
 import { useTheme } from './context/ThemeContext';
+import { initDeepLinking } from './utils/deepLinking';
 
 function App() {
   const { colors } = useTheme();
@@ -116,6 +117,28 @@ function App() {
     });
 
     return () => unsubscribe && unsubscribe();
+  }, []);
+
+  // Deep linking - Gestione link Google Maps da WhatsApp
+  useEffect(() => {
+    const handleLocationFromLink = (location) => {
+      // Quando riceviamo un link con coordinate, apriamo la vista mappa
+      // e zoomiamo sulla posizione ricevuta
+      if (location.lat && location.lng) {
+        setClickedCoordinates({ lat: location.lat, lng: location.lng });
+        setView('add');
+
+        // Mostra notifica all'utente
+        const message = location.address
+          ? `Posizione ricevuta: ${location.address}. Clicca sulla mappa per aggiungere il cantiere.`
+          : `Coordinate ricevute: ${location.lat}, ${location.lng}. Clicca sulla mappa per aggiungere il cantiere.`;
+
+        // Toast notification (opzionale - potresti creare un componente Toast)
+        console.log('📍', message);
+      }
+    };
+
+    initDeepLinking(handleLocationFromLink);
   }, []);
 
   // Login handler
@@ -547,138 +570,147 @@ function App() {
         {view === 'detail' && selectedCantiere && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 view-transition">
             {/* Colonna sinistra: Dettagli cantiere */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-800">{selectedCantiere.nome}</h2>
-                  <p className="text-gray-600">{selectedCantiere.indirizzo}</p>
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
+                <div className="flex items-start justify-between mb-2">
+                  <h2 className="text-2xl font-bold">{selectedCantiere.nome}</h2>
+                  <button
+                    onClick={() => setView('list')}
+                    className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-lg transition backdrop-blur-sm"
+                  >
+                    ✕
+                  </button>
                 </div>
-                <button
-                  onClick={() => setView('list')}
-                  className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg transition"
-                >
-                  ✕ Chiudi
-                </button>
+                <p className="text-blue-100 text-sm">{selectedCantiere.indirizzo}</p>
               </div>
 
-              {/* Info cantiere */}
-              <div className="space-y-3 mb-6">
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div>
-                    <span className="text-gray-500">Tipologia:</span>
-                    <p className="font-medium">{selectedCantiere.tipologia}</p>
+              {/* Body */}
+              <div className="p-4 space-y-3">
+                {/* Info cantiere */}
+                <div className="space-y-2">
+                  <div className="flex items-start">
+                    <span className="text-gray-900 font-bold w-24 flex-shrink-0 text-sm">Tipologia:</span>
+                    <span className="text-gray-900 font-semibold text-sm">{selectedCantiere.tipologia}</span>
                   </div>
-                  <div>
-                    <span className="text-gray-500">Difficoltà:</span>
-                    <p className="font-medium">{selectedCantiere.difficolta}</p>
+
+                  <div className="flex items-start">
+                    <span className="text-gray-900 font-bold w-24 flex-shrink-0 text-sm">Stato:</span>
+                    <span className="text-gray-900 font-semibold text-sm">{selectedCantiere.stato}</span>
                   </div>
-                  <div>
-                    <span className="text-gray-500">Stato:</span>
-                    <p className="font-medium">{selectedCantiere.stato}</p>
-                  </div>
-                  <div>
-                    <span className="text-gray-500">Orari:</span>
-                    <p className="font-medium">{selectedCantiere.orari || 'N/D'}</p>
-                  </div>
-                  {selectedCantiere.cliente && (
-                    <div>
-                      <span className="text-gray-500">Cliente:</span>
-                      <p className="font-medium">{selectedCantiere.cliente}</p>
+
+                  {selectedCantiere.orari && (
+                    <div className="flex items-start">
+                      <span className="text-gray-900 font-bold w-24 flex-shrink-0 text-sm">Orari:</span>
+                      <span className="text-gray-900 font-semibold text-sm">{selectedCantiere.orari}</span>
                     </div>
                   )}
+
+                  {selectedCantiere.cliente && (
+                    <div className="flex items-start">
+                      <span className="text-gray-900 font-bold w-24 flex-shrink-0 text-sm">Cliente:</span>
+                      <span className="text-gray-900 font-semibold text-sm">{selectedCantiere.cliente}</span>
+                    </div>
+                  )}
+
                   {selectedCantiere.coordinatore_nome && (
-                    <div>
-                      <span className="text-gray-500">Coordinatore:</span>
-                      <p className="font-medium">
-                        {selectedCantiere.coordinatore_nome}
+                    <div className="flex items-start">
+                      <span className="text-gray-900 font-bold w-24 flex-shrink-0 text-sm">Coordinatore:</span>
+                      <div className="text-gray-900 font-semibold text-sm">
+                        <div>{selectedCantiere.coordinatore_nome}</div>
                         {selectedCantiere.coordinatore_telefono && (
                           <a
                             href={`tel:${selectedCantiere.coordinatore_telefono}`}
-                            className="block text-blue-500 hover:underline"
+                            className="text-blue-600 hover:text-blue-700 font-bold"
+                            style={{ textDecoration: 'none' }}
                           >
                             {selectedCantiere.coordinatore_telefono}
                           </a>
                         )}
-                      </p>
+                      </div>
                     </div>
                   )}
                 </div>
 
+                {/* Note operative */}
                 {selectedCantiere.note_operative && (
-                  <div className="p-3 bg-yellow-50 rounded border-l-4 border-yellow-400">
-                    <p className="text-xs font-semibold text-yellow-800 mb-1">📝 Note operative:</p>
-                    <p className="text-sm text-yellow-900">{selectedCantiere.note_operative}</p>
+                  <div className="p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+                    <p className="text-xs font-bold text-yellow-900 mb-0.5">Note operative</p>
+                    <p className="text-xs text-yellow-800">{selectedCantiere.note_operative}</p>
                   </div>
                 )}
 
-                {/* Metri Cubi - Visibile a tutti */}
+                {/* Metri Cubi */}
                 {(selectedCantiere.metri_cubi_oggi > 0 || selectedCantiere.metri_cubi_precedenti > 0) && (
-                  <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-blue-300 shadow-sm">
-                    <h4 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
-                      📊 Metri Cubi Calcestruzzo
-                    </h4>
-                    <div className="grid grid-cols-2 gap-3 mb-3">
-                      <div className="bg-white p-3 rounded-lg shadow-sm">
-                        <p className="text-xs text-gray-600 mb-1">🎯 Da Fare Oggi</p>
-                        <p className="text-2xl font-bold text-blue-600">
-                          {parseFloat(selectedCantiere.metri_cubi_oggi || 0).toFixed(1)}
-                          <span className="text-sm font-normal text-gray-500 ml-1">m³</span>
-                        </p>
-                      </div>
-                      <div className="bg-white p-3 rounded-lg shadow-sm">
-                        <p className="text-xs text-gray-600 mb-1">✅ Già Fatti</p>
-                        <p className="text-2xl font-bold text-green-600">
-                          {parseFloat(selectedCantiere.metri_cubi_precedenti || 0).toFixed(1)}
-                          <span className="text-sm font-normal text-gray-500 ml-1">m³</span>
-                        </p>
-                      </div>
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-bold text-gray-900 border-b-2 border-gray-200 pb-1">
+                      Metri Cubi Calcestruzzo
+                    </h3>
+
+                    <div className="bg-blue-50 p-3 rounded-lg">
+                      <p className="text-xs text-gray-800 font-bold mb-0.5">Da Fare Oggi</p>
+                      <p className="text-2xl font-bold text-blue-600">
+                        {parseFloat(selectedCantiere.metri_cubi_oggi || 0).toFixed(1)}
+                        <span className="text-sm font-semibold text-gray-600 ml-1.5">m³</span>
+                      </p>
                     </div>
-                    <div className="bg-gradient-to-r from-green-500 to-green-600 p-3 rounded-lg text-white shadow-md">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold">📈 Totale Fine Giornata:</span>
-                        <span className="text-2xl font-bold">
-                          {(parseFloat(selectedCantiere.metri_cubi_oggi || 0) + parseFloat(selectedCantiere.metri_cubi_precedenti || 0)).toFixed(1)} m³
-                        </span>
-                      </div>
+
+                    <div className="bg-green-50 p-3 rounded-lg">
+                      <p className="text-xs text-gray-800 font-bold mb-0.5">Già Fatti</p>
+                      <p className="text-2xl font-bold text-green-600">
+                        {parseFloat(selectedCantiere.metri_cubi_precedenti || 0).toFixed(1)}
+                        <span className="text-sm font-semibold text-gray-600 ml-1.5">m³</span>
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-lg" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
+                      <p className="text-xs font-bold text-white mb-0.5" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                        Totale Fine Giornata
+                      </p>
+                      <p className="text-2xl font-bold text-white" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+                        {(parseFloat(selectedCantiere.metri_cubi_oggi || 0) + parseFloat(selectedCantiere.metri_cubi_precedenti || 0)).toFixed(1)}
+                        <span className="text-sm font-bold text-white ml-1.5">m³</span>
+                      </p>
                     </div>
                   </div>
+                )}
+
+                {/* Foto cantiere */}
+                {selectedCantiere.foto_urls && selectedCantiere.foto_urls.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-900 mb-2 border-b-2 border-gray-200 pb-1">Foto Cantiere</h3>
+                    <div className="grid grid-cols-3 gap-2">
+                      {selectedCantiere.foto_urls.map((url, index) => (
+                        <a
+                          key={index}
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            src={url}
+                            alt={`Foto ${index + 1}`}
+                            className="w-full h-20 object-cover rounded-lg hover:opacity-90 transition shadow-sm"
+                          />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Link Google Maps - CENTRATO */}
+                {selectedCantiere.maps_link && (
+                  <a
+                    href={selectedCantiere.maps_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white text-center font-bold rounded-lg transition shadow-md text-sm"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Apri in Google Maps
+                  </a>
                 )}
               </div>
-
-              {/* Foto cantiere */}
-              {selectedCantiere.foto_urls && selectedCantiere.foto_urls.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="font-semibold mb-2">Foto Cantiere</h3>
-                  <div className="grid grid-cols-3 gap-2">
-                    {selectedCantiere.foto_urls.map((url, index) => (
-                      <a
-                        key={index}
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src={url}
-                          alt={`Foto ${index + 1}`}
-                          className="w-full h-24 object-cover rounded-lg hover:opacity-90 transition"
-                        />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Link Google Maps */}
-              {selectedCantiere.maps_link && (
-                <a
-                  href={selectedCantiere.maps_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white text-center font-semibold rounded-lg transition"
-                >
-                  🗺️ Apri in Google Maps
-                </a>
-              )}
             </div>
 
             {/* Colonna destra: Note autisti */}
