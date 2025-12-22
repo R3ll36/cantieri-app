@@ -513,32 +513,10 @@ function App() {
       )}
 
       {/* Main content */}
-      <main style={{ flex: 1 }} className="container mx-auto px-4 py-6">
-        {/* Vista Settings */}
-        {view === 'settings' && (
-          <div className="view-transition">
-            <Settings />
-          </div>
-        )}
-
-        {/* Vista Lista */}
-        {view === 'list' && (
-          <div className="view-transition">
-            <CantieriList
-              cantieri={cantieri}
-              onCantiereClick={handleCantiereClick}
-              onEdit={!user.isGuest ? (cantiere) => {
-                setSelectedCantiere(cantiere);
-                setView('edit');
-              } : undefined}
-              onDelete={!user.isGuest ? handleDeleteCantiere : undefined}
-            />
-          </div>
-        )}
-
-        {/* Vista Mappa */}
+      <main style={{ flex: 1 }}>
+        {/* Vista Mappa - FULL WIDTH senza padding */}
         {view === 'map' && (
-          <div className="h-[calc(100vh-180px)] view-transition">
+          <div className="h-[calc(100vh-80px)] view-transition">
             <MapView
               cantieri={cantieri}
               onCantiereClick={handleCantiereClick}
@@ -547,39 +525,64 @@ function App() {
           </div>
         )}
 
-        {/* Form Aggiungi Cantiere */}
-        {view === 'add' && !user.isGuest && (
-          <div className="view-transition">
-            <CantiereForm
-            initialCoordinates={clickedCoordinates}
-            onSubmit={handleCreateCantiere}
-            onCancel={() => {
-              setView('list');
-              setClickedCoordinates(null);
-            }}
-            isLoading={isSubmitting}
-          />
-          </div>
-        )}
+        {/* Altre viste con container e padding */}
+        {view !== 'map' && (
+          <div className="container mx-auto px-4 py-6">
+            {/* Vista Settings */}
+            {view === 'settings' && (
+              <div className="view-transition">
+                <Settings />
+              </div>
+            )}
 
-        {/* Form Modifica Cantiere */}
-        {view === 'edit' && selectedCantiere && !user.isGuest && (
-          <div className="view-transition">
-            <CantiereForm
-              initialData={selectedCantiere}
-              onSubmit={handleUpdateCantiere}
-              onCancel={() => {
-                setView('list');
-                setSelectedCantiere(null);
-              }}
-              isLoading={isSubmitting}
-            />
-          </div>
-        )}
+            {/* Vista Lista */}
+            {view === 'list' && (
+              <div className="view-transition">
+                <CantieriList
+                  cantieri={cantieri}
+                  onCantiereClick={handleCantiereClick}
+                  onEdit={!user.isGuest ? (cantiere) => {
+                    setSelectedCantiere(cantiere);
+                    setView('edit');
+                  } : undefined}
+                  onDelete={!user.isGuest ? handleDeleteCantiere : undefined}
+                />
+              </div>
+            )}
 
-        {/* Dettaglio Cantiere */}
-        {view === 'detail' && selectedCantiere && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 view-transition">
+            {/* Form Aggiungi Cantiere */}
+            {view === 'add' && !user.isGuest && (
+              <div className="view-transition">
+                <CantiereForm
+                initialCoordinates={clickedCoordinates}
+                onSubmit={handleCreateCantiere}
+                onCancel={() => {
+                  setView('list');
+                  setClickedCoordinates(null);
+                }}
+                isLoading={isSubmitting}
+              />
+              </div>
+            )}
+
+            {/* Form Modifica Cantiere */}
+            {view === 'edit' && selectedCantiere && !user.isGuest && (
+              <div className="view-transition">
+                <CantiereForm
+                  initialData={selectedCantiere}
+                  onSubmit={handleUpdateCantiere}
+                  onCancel={() => {
+                    setView('list');
+                    setSelectedCantiere(null);
+                  }}
+                  isLoading={isSubmitting}
+                />
+              </div>
+            )}
+
+            {/* Dettaglio Cantiere */}
+            {view === 'detail' && selectedCantiere && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 view-transition">
             {/* Colonna sinistra: Dettagli cantiere */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               {/* Header */}
@@ -728,6 +731,8 @@ function App() {
             <div className="lg:sticky lg:top-6 lg:self-start">
               <NoteAutisti cantiereId={selectedCantiere.id} currentUser={user} />
             </div>
+              </div>
+            )}
           </div>
         )}
       </main>

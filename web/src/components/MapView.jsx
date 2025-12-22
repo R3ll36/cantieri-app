@@ -85,6 +85,7 @@ export default function MapView({
 }) {
   const [selectedCantiere, setSelectedCantiere] = useState(null);
   const [tempMarker, setTempMarker] = useState(null); // Marker temporaneo per nuovo cantiere
+  const [mapClickTrigger, setMapClickTrigger] = useState(0); // Trigger per chiudere ricerca
   const mapRef = useRef(null);
 
   // Determina icona in base ad accesso camion e stato
@@ -105,6 +106,7 @@ export default function MapView({
   // Gestisce right-click sulla mappa
   const handleRightClick = (latlng) => {
     setTempMarker(latlng); // Mostra marker temporaneo
+    setMapClickTrigger(prev => prev + 1); // Chiudi risultati ricerca
   };
 
   // Conferma aggiunta cantiere
@@ -154,7 +156,7 @@ export default function MapView({
   return (
     <div className="w-full h-full relative">
       {/* Barra di ricerca */}
-      <MapSearchBar onLocationSelect={handleSearchLocationSelect} />
+      <MapSearchBar onLocationSelect={handleSearchLocationSelect} onMapClick={mapClickTrigger} />
 
       <MapContainer
         center={[center.lat, center.lng]}
@@ -165,12 +167,11 @@ export default function MapView({
         {/* Setter per riferimento mappa */}
         <MapRefSetter mapRef={mapRef} />
 
-        {/* Tile Layer - Stile Apple Maps (colori chiari e moderni) */}
+        {/* Tile Layer - Stile Apple Maps (palette naturale con verde bosco) */}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          subdomains="abcd"
-          maxZoom={20}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://tile.jawg.io/jawg-light/{z}/{x}/{y}{r}.png?access-token=r7d86rg0Jw4PUjoQI3VYhPQRNSdPqMcvF3HKHkkAOk3fGIQMGKcMPmGRfZVgVwOh"
+          maxZoom={22}
         />
 
         {/* Handler per click/right-click su mappa */}

@@ -3,12 +3,19 @@ import { useState, useEffect, useRef } from 'react';
 /**
  * Barra di ricerca con Google Places Autocomplete per la mappa
  */
-export default function MapSearchBar({ onLocationSelect }) {
+export default function MapSearchBar({ onLocationSelect, onMapClick }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [predictions, setPredictions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const autocompleteService = useRef(null);
   const geocoder = useRef(null);
+
+  // Chiudi risultati quando si clicca sulla mappa
+  useEffect(() => {
+    if (onMapClick) {
+      setPredictions([]);
+    }
+  }, [onMapClick]);
 
   // Inizializza Google Places Autocomplete
   useEffect(() => {
