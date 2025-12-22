@@ -112,7 +112,7 @@ export default function MapSearchBar({ onLocationSelect }) {
         {/* Lista suggerimenti */}
         {predictions.length > 0 && (
           <div className="absolute w-full mt-2 bg-white rounded-xl shadow-2xl border-2 border-blue-200 max-h-96 overflow-y-auto backdrop-blur-sm">
-            {predictions.map((prediction, index) => (
+            {predictions.map((prediction) => (
               <button
                 key={prediction.place_id}
                 onClick={() => handleSelectPlace(prediction.place_id, prediction.description)}
