@@ -43,14 +43,23 @@ const icons = {
 /**
  * Componente per gestire click su mappa (incluso right-click)
  */
-function MapClickHandler({ onMapClick, onRightClick }) {
+function MapClickHandler({ onMapClick, onRightClick, onAnyClick }) {
   const map = useMapEvents({
     click(e) {
+      // Notifica click generico (per chiudere ricerca)
+      if (onAnyClick) {
+        onAnyClick();
+      }
+      // Gestisci click normale
       if (onMapClick) {
         onMapClick(e.latlng);
       }
     },
     contextmenu(e) {
+      // Notifica click generico (per chiudere ricerca)
+      if (onAnyClick) {
+        onAnyClick();
+      }
       // Right-click sulla mappa
       if (onRightClick) {
         // Previeni menu contestuale del browser in tutti i modi possibili
@@ -103,10 +112,14 @@ export default function MapView({
     }
   };
 
+  // Gestisce qualsiasi click sulla mappa (chiude ricerca)
+  const handleAnyMapClick = () => {
+    setMapClickTrigger(prev => prev + 1); // Chiudi risultati ricerca
+  };
+
   // Gestisce right-click sulla mappa
   const handleRightClick = (latlng) => {
     setTempMarker(latlng); // Mostra marker temporaneo
-    setMapClickTrigger(prev => prev + 1); // Chiudi risultati ricerca
   };
 
   // Conferma aggiunta cantiere
@@ -176,7 +189,7 @@ export default function MapView({
         />
 
         {/* Handler per click/right-click su mappa */}
-        {onMapClick && <MapClickHandler onRightClick={handleRightClick} />}
+        <MapClickHandler onRightClick={onMapClick ? handleRightClick : undefined} onAnyClick={handleAnyMapClick} />
 
         {/* Marker cantieri */}
         {cantieri.map((cantiere) => (

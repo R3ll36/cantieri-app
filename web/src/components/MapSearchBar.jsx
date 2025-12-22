@@ -17,6 +17,19 @@ export default function MapSearchBar({ onLocationSelect, onMapClick }) {
     }
   }, [onMapClick]);
 
+  // Chiudi risultati con tasto ESC
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setPredictions([]);
+        setSearchQuery('');
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
+
   // Inizializza Google Places Autocomplete
   useEffect(() => {
     if (window.google && window.google.maps) {
