@@ -310,8 +310,13 @@ function App() {
         <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full">
           <div className="text-center mb-6">
             {/* Logo General Beton */}
-            <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <span className="text-white font-black text-3xl" style={{ fontFamily: 'Arial Black, sans-serif' }}>GB</span>
+            <div className="flex justify-center mb-4">
+              <img
+                src="/general.png"
+                alt="General Beton Logo"
+                className="h-24 w-auto"
+                style={{ objectFit: 'contain' }}
+              />
             </div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2">General Beton</h1>
             <p className="text-gray-600">Gestione Cantieri Calcestruzzo</p>
