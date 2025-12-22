@@ -167,11 +167,12 @@ export default function MapView({
         {/* Setter per riferimento mappa */}
         <MapRefSetter mapRef={mapRef} />
 
-        {/* Tile Layer - Stile Apple Maps (palette naturale con verde bosco) */}
+        {/* Tile Layer - Stile Apple Maps (CARTO Positron - colori naturali chiari) */}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://tile.jawg.io/jawg-light/{z}/{x}/{y}{r}.png?access-token=r7d86rg0Jw4PUjoQI3VYhPQRNSdPqMcvF3HKHkkAOk3fGIQMGKcMPmGRfZVgVwOh"
-          maxZoom={22}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          subdomains="abcd"
+          maxZoom={20}
         />
 
         {/* Handler per click/right-click su mappa */}
