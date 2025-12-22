@@ -35,11 +35,12 @@ export default function MapSearchBar({ onLocationSelect }) {
     setIsLoading(true);
 
     // Cerca in Italia preferibilmente
+    // Nota: 'geocode' include sia indirizzi che località, 'establishment' cerca luoghi/attività
     autocompleteService.current.getPlacePredictions(
       {
         input: value,
         componentRestrictions: { country: 'it' },
-        types: ['address', 'establishment', 'geocode']
+        types: ['geocode'] // Rimuovo 'address' e 'establishment' - 'geocode' copre tutto
       },
       (results, status) => {
         setIsLoading(false);
