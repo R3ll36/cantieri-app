@@ -7,6 +7,7 @@ import CantiereForm from './components/CantiereForm';
 import NoteAutisti from './components/NoteAutisti';
 import Header from './components/Header';
 import Settings from './components/Settings';
+import HowItWorks from './components/HowItWorks';
 import IOSInstallPrompt from './components/IOSInstallPrompt';
 import { useTheme } from './context/ThemeContext';
 import { initDeepLinking } from './utils/deepLinking';
@@ -525,8 +526,15 @@ function App() {
           </div>
         )}
 
+        {/* Come Funziona - FULL WIDTH come la mappa */}
+        {view === 'howItWorks' && (
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} className="view-transition">
+            <HowItWorks />
+          </div>
+        )}
+
         {/* Altre viste con container e padding */}
-        {view !== 'map' && (
+        {view !== 'map' && view !== 'howItWorks' && (
           <div className="container mx-auto px-4 py-6">
             {/* Vista Settings */}
             {view === 'settings' && (

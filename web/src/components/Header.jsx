@@ -99,6 +99,36 @@ export default function Header({ user, onLogout, view, setView }) {
             Mappa
           </button>
 
+          <button
+            onClick={() => setView("howItWorks")}
+            style={{
+              backgroundColor:
+                view === "howItWorks"
+                  ? colors.buttonActiveBg
+                  : colors.buttonInactiveBg,
+              color:
+                view === "howItWorks"
+                  ? colors.buttonActiveText
+                  : colors.buttonInactiveText,
+              padding: "0.5rem 1rem",
+              borderRadius: "0.5rem",
+              fontWeight: "600",
+              transition: "all 0.2s",
+              border: "none",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => {
+              if (view !== "howItWorks")
+                e.target.style.backgroundColor = colors.buttonHover;
+            }}
+            onMouseLeave={(e) => {
+              if (view !== "howItWorks")
+                e.target.style.backgroundColor = colors.buttonInactiveBg;
+            }}
+          >
+            Come Funziona
+          </button>
+
           {!user?.isGuest && (
             <button
               onClick={() => setView("add")}
@@ -185,18 +215,35 @@ export default function Header({ user, onLogout, view, setView }) {
         </div>
       </div>
 
-      {/* Mobile Menu - ONLY visible when open and on mobile (< 640px) */}
+      {/* Mobile Menu - Full Screen Overlay */}
       {isMobileMenuOpen && (
         <div
           className="sm:hidden mobile-menu-enter"
           style={{
+            position: "fixed",
+            top: "72px",
+            left: 0,
+            right: 0,
+            bottom: 0,
             backgroundColor: colors.surface,
-            borderTop: `1px solid ${colors.border}`,
-            padding: "1rem",
+            zIndex: 9999,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "2rem",
+            gap: "1.5rem",
           }}
         >
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              width: "100%",
+              maxWidth: "300px",
+              alignItems: "center"
+            }}
           >
             <button
               onClick={() => {
@@ -212,12 +259,15 @@ export default function Header({ user, onLogout, view, setView }) {
                   view === "list"
                     ? colors.buttonActiveText
                     : colors.buttonInactiveText,
-                padding: "0.75rem",
-                borderRadius: "0.5rem",
+                padding: "1rem 2rem",
+                borderRadius: "0.75rem",
                 fontWeight: "600",
                 border: "none",
                 cursor: "pointer",
-                textAlign: "left",
+                textAlign: "center",
+                fontSize: "1.1rem",
+                width: "auto",
+                minWidth: "200px",
               }}
             >
               📋 Lista
@@ -237,15 +287,46 @@ export default function Header({ user, onLogout, view, setView }) {
                   view === "map"
                     ? colors.buttonActiveText
                     : colors.buttonInactiveText,
-                padding: "0.75rem",
-                borderRadius: "0.5rem",
+                padding: "1rem 2rem",
+                borderRadius: "0.75rem",
                 fontWeight: "600",
                 border: "none",
                 cursor: "pointer",
-                textAlign: "left",
+                textAlign: "center",
+                fontSize: "1.1rem",
+                width: "auto",
+                minWidth: "200px",
               }}
             >
               🗺️ Mappa
+            </button>
+
+            <button
+              onClick={() => {
+                setView("howItWorks");
+                setIsMobileMenuOpen(false);
+              }}
+              style={{
+                backgroundColor:
+                  view === "howItWorks"
+                    ? colors.buttonActiveBg
+                    : colors.buttonInactiveBg,
+                color:
+                  view === "howItWorks"
+                    ? colors.buttonActiveText
+                    : colors.buttonInactiveText,
+                padding: "1rem 2rem",
+                borderRadius: "0.75rem",
+                fontWeight: "600",
+                border: "none",
+                cursor: "pointer",
+                textAlign: "center",
+                fontSize: "1.1rem",
+                width: "auto",
+                minWidth: "200px",
+              }}
+            >
+              ℹ️ Come Funziona
             </button>
 
             {!user?.isGuest && (
@@ -257,12 +338,15 @@ export default function Header({ user, onLogout, view, setView }) {
                 style={{
                   backgroundColor: colors.success,
                   color: colors.textWhite,
-                  padding: "0.75rem",
-                  borderRadius: "0.5rem",
+                  padding: "1rem 2rem",
+                  borderRadius: "0.75rem",
                   fontWeight: "600",
                   border: "none",
                   cursor: "pointer",
-                  textAlign: "left",
+                  textAlign: "center",
+                  fontSize: "1.1rem",
+                  width: "auto",
+                  minWidth: "200px",
                 }}
               >
                 ➕ Nuovo Cantiere
@@ -277,12 +361,15 @@ export default function Header({ user, onLogout, view, setView }) {
               style={{
                 backgroundColor: colors.buttonInactiveBg,
                 color: colors.buttonInactiveText,
-                padding: "0.75rem",
-                borderRadius: "0.5rem",
+                padding: "1rem 2rem",
+                borderRadius: "0.75rem",
                 fontWeight: "600",
                 border: "none",
                 cursor: "pointer",
-                textAlign: "left",
+                textAlign: "center",
+                fontSize: "1.1rem",
+                width: "auto",
+                minWidth: "200px",
               }}
             >
               {isDarkMode ? "☀️ Modalità chiara" : "🌙 Modalità scura"}
@@ -291,15 +378,20 @@ export default function Header({ user, onLogout, view, setView }) {
             <div
               style={{
                 borderTop: `1px solid ${colors.border}`,
-                paddingTop: "0.75rem",
-                marginTop: "0.5rem",
+                paddingTop: "1.5rem",
+                marginTop: "1rem",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "1rem",
               }}
             >
               <p
                 style={{
-                  fontSize: "0.875rem",
+                  fontSize: "0.95rem",
                   color: colors.textSecondary,
-                  marginBottom: "0.75rem",
+                  textAlign: "center",
                 }}
               >
                 {user?.isGuest ? "Ospite" : user.email}
@@ -312,12 +404,15 @@ export default function Header({ user, onLogout, view, setView }) {
                 style={{
                   backgroundColor: colors.danger,
                   color: colors.textWhite,
-                  padding: "0.75rem",
-                  borderRadius: "0.5rem",
+                  padding: "1rem 2rem",
+                  borderRadius: "0.75rem",
                   fontWeight: "600",
                   border: "none",
                   cursor: "pointer",
-                  width: "100%",
+                  width: "auto",
+                  minWidth: "200px",
+                  fontSize: "1.1rem",
+                  textAlign: "center",
                 }}
               >
                 Esci
