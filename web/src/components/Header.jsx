@@ -109,28 +109,6 @@ export default function Header({ user, onLogout, view, setView }) {
             </a>
           )}
 
-          <a
-            onClick={() => setView("notes")}
-            style={{
-              color: view === "notes" ? colors.primary : colors.textPrimary,
-              fontWeight: view === "notes" ? "600" : "500",
-              fontSize: "1rem",
-              cursor: "pointer",
-              textDecoration: "none",
-              transition: "color 0.2s",
-              borderBottom: view === "notes" ? `2px solid ${colors.primary}` : "2px solid transparent",
-              paddingBottom: "0.25rem",
-            }}
-            onMouseEnter={(e) => {
-              if (view !== "notes") e.target.style.color = colors.primary;
-            }}
-            onMouseLeave={(e) => {
-              if (view !== "notes") e.target.style.color = colors.textPrimary;
-            }}
-          >
-            Note
-          </a>
-
           {/* Right section with icons */}
           <div className="flex items-center gap-4 ml-4 pl-4" style={{ borderLeft: `1px solid ${colors.border}` }}>
             {/* Settings icon */}
