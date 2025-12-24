@@ -741,6 +741,18 @@ function App() {
             </div>
               </div>
             )}
+
+            {/* Vista Note Autisti (senza cantiere selezionato) */}
+            {view === 'notes' && (
+              <div className="view-transition">
+                <h2 className="text-2xl font-bold mb-4" style={{ color: colors.textPrimary }}>
+                  Note Autisti
+                </h2>
+                <p className="text-gray-600 mb-4">
+                  Seleziona un cantiere dalla mappa o dalla lista per visualizzare e aggiungere note.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </main>

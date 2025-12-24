@@ -12,13 +12,13 @@ export default function Header({ user, onLogout, view, setView }) {
         boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
       }}
     >
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <div
           className="flex items-center gap-3 cursor-pointer"
           onClick={() => setView("map")}
         >
-          <img src="/general.png" alt="General Beton" className="navbar-logo" />
+          <img src="/general.png" alt="Alpacem Cantieri" className="navbar-logo" />
         </div>
 
         {/* Hamburger button - ONLY mobile (< 640px) */}
@@ -29,187 +29,183 @@ export default function Header({ user, onLogout, view, setView }) {
             backgroundColor: "transparent",
             border: "none",
             cursor: "pointer",
-            fontSize: "2rem",
+            fontSize: "2.5rem",
             color: colors.textPrimary,
             padding: "0.5rem",
+            lineHeight: 1,
           }}
         >
           {isMobileMenuOpen ? "✕" : "☰"}
         </button>
 
         {/* Desktop Navigation - hidden on mobile */}
-        <div className="hidden sm:flex items-center gap-3">
-          <button
-            onClick={() => setView("list")}
-            style={{
-              backgroundColor:
-                view === "list"
-                  ? colors.buttonActiveBg
-                  : colors.buttonInactiveBg,
-              color:
-                view === "list"
-                  ? colors.buttonActiveText
-                  : colors.buttonInactiveText,
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              fontWeight: "600",
-              transition: "all 0.2s",
-              border: "none",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              if (view !== "list")
-                e.target.style.backgroundColor = colors.buttonHover;
-            }}
-            onMouseLeave={(e) => {
-              if (view !== "list")
-                e.target.style.backgroundColor = colors.buttonInactiveBg;
-            }}
-          >
-            Lista
-          </button>
-
-          <button
+        <div className="hidden sm:flex items-center gap-8">
+          {/* Menu links testuali */}
+          <a
             onClick={() => setView("map")}
             style={{
-              backgroundColor:
-                view === "map"
-                  ? colors.buttonActiveBg
-                  : colors.buttonInactiveBg,
-              color:
-                view === "map"
-                  ? colors.buttonActiveText
-                  : colors.buttonInactiveText,
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              fontWeight: "600",
-              transition: "all 0.2s",
-              border: "none",
+              color: view === "map" ? colors.primary : colors.textPrimary,
+              fontWeight: view === "map" ? "600" : "500",
+              fontSize: "1rem",
               cursor: "pointer",
+              textDecoration: "none",
+              transition: "color 0.2s",
+              borderBottom: view === "map" ? `2px solid ${colors.primary}` : "2px solid transparent",
+              paddingBottom: "0.25rem",
             }}
             onMouseEnter={(e) => {
-              if (view !== "map")
-                e.target.style.backgroundColor = colors.buttonHover;
+              if (view !== "map") e.target.style.color = colors.primary;
             }}
             onMouseLeave={(e) => {
-              if (view !== "map")
-                e.target.style.backgroundColor = colors.buttonInactiveBg;
+              if (view !== "map") e.target.style.color = colors.textPrimary;
             }}
           >
             Mappa
-          </button>
+          </a>
 
-          <button
-            onClick={() => setView("howItWorks")}
+          <a
+            onClick={() => setView("list")}
             style={{
-              backgroundColor:
-                view === "howItWorks"
-                  ? colors.buttonActiveBg
-                  : colors.buttonInactiveBg,
-              color:
-                view === "howItWorks"
-                  ? colors.buttonActiveText
-                  : colors.buttonInactiveText,
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              fontWeight: "600",
-              transition: "all 0.2s",
-              border: "none",
+              color: view === "list" ? colors.primary : colors.textPrimary,
+              fontWeight: view === "list" ? "600" : "500",
+              fontSize: "1rem",
               cursor: "pointer",
+              textDecoration: "none",
+              transition: "color 0.2s",
+              borderBottom: view === "list" ? `2px solid ${colors.primary}` : "2px solid transparent",
+              paddingBottom: "0.25rem",
             }}
             onMouseEnter={(e) => {
-              if (view !== "howItWorks")
-                e.target.style.backgroundColor = colors.buttonHover;
+              if (view !== "list") e.target.style.color = colors.primary;
             }}
             onMouseLeave={(e) => {
-              if (view !== "howItWorks")
-                e.target.style.backgroundColor = colors.buttonInactiveBg;
+              if (view !== "list") e.target.style.color = colors.textPrimary;
             }}
           >
-            Come Funziona
-          </button>
+            Elenco
+          </a>
 
           {!user?.isGuest && (
-            <button
+            <a
               onClick={() => setView("add")}
               style={{
-                backgroundColor: colors.success,
-                color: colors.textWhite,
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                fontWeight: "600",
-                transition: "all 0.2s",
-                border: "none",
+                color: view === "add" ? colors.primary : colors.textPrimary,
+                fontWeight: view === "add" ? "600" : "500",
+                fontSize: "1rem",
                 cursor: "pointer",
+                textDecoration: "none",
+                transition: "color 0.2s",
+                borderBottom: view === "add" ? `2px solid ${colors.primary}` : "2px solid transparent",
+                paddingBottom: "0.25rem",
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = colors.successHover;
+                if (view !== "add") e.target.style.color = colors.primary;
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = colors.success;
+                if (view !== "add") e.target.style.color = colors.textPrimary;
               }}
             >
               Nuovo
-            </button>
+            </a>
           )}
 
-          {/* Dark Mode Toggle */}
-          <button
-            onClick={toggleDarkMode}
+          <a
+            onClick={() => setView("notes")}
             style={{
-              backgroundColor: colors.buttonInactiveBg,
-              color: colors.buttonInactiveText,
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              fontWeight: "600",
-              transition: "all 0.2s",
-              border: "none",
+              color: view === "notes" ? colors.primary : colors.textPrimary,
+              fontWeight: view === "notes" ? "600" : "500",
+              fontSize: "1rem",
               cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              textDecoration: "none",
+              transition: "color 0.2s",
+              borderBottom: view === "notes" ? `2px solid ${colors.primary}` : "2px solid transparent",
+              paddingBottom: "0.25rem",
             }}
             onMouseEnter={(e) => {
-              e.target.style.backgroundColor = colors.buttonHover;
+              if (view !== "notes") e.target.style.color = colors.primary;
             }}
             onMouseLeave={(e) => {
-              e.target.style.backgroundColor = colors.buttonInactiveBg;
+              if (view !== "notes") e.target.style.color = colors.textPrimary;
             }}
-            title={isDarkMode ? "Modalità chiara" : "Modalità scura"}
           >
-            <span style={{ fontSize: "1.25rem", lineHeight: 1 }}>
-              {isDarkMode ? "☀️" : "🌙"}
-            </span>
-          </button>
+            Note
+          </a>
 
-          <div
-            className="flex items-center gap-2 ml-4 pl-4"
-            style={{ borderLeft: `1px solid ${colors.border}` }}
-          >
+          {/* Right section with icons */}
+          <div className="flex items-center gap-4 ml-4 pl-4" style={{ borderLeft: `1px solid ${colors.border}` }}>
+            {/* Settings icon */}
+            <button
+              onClick={() => setView("settings")}
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "0.5rem",
+                color: view === "settings" ? colors.primary : colors.textSecondary,
+                fontSize: "1.25rem",
+                lineHeight: 1,
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.color = colors.primary;
+              }}
+              onMouseLeave={(e) => {
+                if (view !== "settings") e.target.style.color = colors.textSecondary;
+              }}
+              title="Impostazioni"
+            >
+              ⚙️
+            </button>
+
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleDarkMode}
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "0.5rem",
+                color: colors.textSecondary,
+                fontSize: "1.25rem",
+                lineHeight: 1,
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.color = colors.primary;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.color = colors.textSecondary;
+              }}
+              title={isDarkMode ? "Modalità chiara" : "Modalità scura"}
+            >
+              {isDarkMode ? "☀️" : "🌙"}
+            </button>
+
+            {/* User info + Logout */}
             <span style={{ fontSize: "0.875rem", color: colors.textSecondary }}>
               {user?.isGuest ? "Ospite" : user.email}
             </span>
             <button
               onClick={onLogout}
               style={{
-                backgroundColor: colors.danger,
-                color: colors.textWhite,
-                padding: "0.375rem 0.75rem",
-                borderRadius: "0.5rem",
-                fontWeight: "600",
-                fontSize: "0.875rem",
-                transition: "all 0.2s",
+                backgroundColor: "transparent",
                 border: "none",
                 cursor: "pointer",
+                padding: "0.5rem",
+                color: colors.textSecondary,
+                fontSize: "1.25rem",
+                lineHeight: 1,
+                transition: "color 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = colors.dangerHover;
+                e.target.style.color = colors.danger;
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = colors.danger;
+                e.target.style.color = colors.textSecondary;
               }}
+              title="Esci"
             >
-              Esci
+              🚪
             </button>
           </div>
         </div>

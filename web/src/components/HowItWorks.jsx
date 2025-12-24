@@ -57,9 +57,9 @@ const HowItWorks = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white overflow-y-auto">
+    <div style={{ height: '100vh', overflow: 'auto', WebkitOverflowScrolling: 'touch' }} className="bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800">
         {/* Animated background */}
         <div className="absolute inset-0 opacity-20">
           <div
@@ -73,30 +73,30 @@ const HowItWorks = () => {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center text-white">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 animate-fade-in">
-            General Beton Cantieri
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in text-white">
+            Alpacem Cantieri
           </h1>
-          <p className="text-2xl md:text-3xl mb-8 text-blue-100 font-light">
+          <p className="text-2xl md:text-3xl mb-8 font-light text-white">
             Gestisci i tuoi cantieri con semplicità
           </p>
-          <p className="text-lg md:text-xl mb-12 text-blue-200 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl mb-12 max-w-3xl mx-auto leading-relaxed text-white">
             La soluzione completa per la gestione dei cantieri su mappa.
             Traccia posizioni, condividi note, naviga con GPS integrato.
           </p>
 
           <div className="flex flex-wrap justify-center gap-6 mb-16">
-            <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/30">
-              <span className="font-semibold">🗺️ Mappa Interattiva</span>
+            <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/40">
+              <span className="font-semibold text-white">🗺️ Mappa Interattiva</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/30">
-              <span className="font-semibold">📱 PWA Mobile</span>
+            <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/40">
+              <span className="font-semibold text-white">📱 PWA Mobile</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/30">
-              <span className="font-semibold">⚡ Real-time</span>
+            <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/40">
+              <span className="font-semibold text-white">⚡ Real-time</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/30">
-              <span className="font-semibold">🔒 Sicuro</span>
+            <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/40">
+              <span className="font-semibold text-white">🔒 Sicuro</span>
             </div>
           </div>
 

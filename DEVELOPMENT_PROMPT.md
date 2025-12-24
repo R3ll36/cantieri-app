@@ -1,4 +1,4 @@
-# General Beton Cantieri App - Prompt di Sviluppo Dettagliato
+# Alpacem Cantieri App - Prompt di Sviluppo Dettagliato
 
 ## Contesto Generale
 Questa è un'applicazione PWA (Progressive Web App) per la gestione di cantieri edili, costruita con React 19, Vite, Firebase (Firestore, Auth, Storage), Leaflet Maps e Google Maps API.
@@ -59,7 +59,7 @@ cantieri-app/
 - Gestito da Firebase Auth
 
 ### 2. Mappa Interattiva (MapView.jsx)
-- **Tile Layer**: OpenStreetMap HOT (Humanitarian) - colori vividi tipo Apple Maps
+- **Tile Layer**: colori vividi tipo Apple Maps
 - **Marker colorati per difficoltà**:
   - Verde: Facile
   - Giallo: Medio
