@@ -1,9 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTheme } from "../context/ThemeContext";
 
 export default function Header({ user, onLogout, view, setView }) {
   const { colors, isDarkMode, toggleDarkMode } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
 
   return (
     <header
@@ -132,41 +151,17 @@ export default function Header({ user, onLogout, view, setView }) {
           </a>
 
           {/* Right section with icons */}
-          <div className="flex items-center gap-4 ml-4 pl-4" style={{ borderLeft: `1px solid ${colors.border}` }}>
-            {/* Settings icon */}
+          <div ref={userMenuRef} className="flex items-center gap-4 ml-4 pl-4" style={{ borderLeft: `1px solid ${colors.border}`, position: 'relative' }}>
+            {/* User icon with dropdown */}
             <button
-              onClick={() => setView("settings")}
-              style={{
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-                padding: "0.5rem",
-                color: view === "settings" ? colors.primary : colors.textSecondary,
-                fontSize: "1.25rem",
-                lineHeight: 1,
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.color = colors.primary;
-              }}
-              onMouseLeave={(e) => {
-                if (view !== "settings") e.target.style.color = colors.textSecondary;
-              }}
-              title="Impostazioni"
-            >
-              ⚙️
-            </button>
-
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={toggleDarkMode}
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               style={{
                 backgroundColor: "transparent",
                 border: "none",
                 cursor: "pointer",
                 padding: "0.5rem",
                 color: colors.textSecondary,
-                fontSize: "1.25rem",
+                fontSize: "1.5rem",
                 lineHeight: 1,
                 transition: "color 0.2s",
               }}
@@ -176,37 +171,120 @@ export default function Header({ user, onLogout, view, setView }) {
               onMouseLeave={(e) => {
                 e.target.style.color = colors.textSecondary;
               }}
-              title={isDarkMode ? "Modalità chiara" : "Modalità scura"}
+              title={user?.isGuest ? "Ospite" : user.email}
             >
-              {isDarkMode ? "☀️" : "🌙"}
+              👤
             </button>
 
-            {/* User info + Logout */}
-            <span style={{ fontSize: "0.875rem", color: colors.textSecondary }}>
-              {user?.isGuest ? "Ospite" : user.email}
-            </span>
-            <button
-              onClick={onLogout}
-              style={{
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-                padding: "0.5rem",
-                color: colors.textSecondary,
-                fontSize: "1.25rem",
-                lineHeight: 1,
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.color = colors.danger;
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = colors.textSecondary;
-              }}
-              title="Esci"
-            >
-              🚪
-            </button>
+            {/* User dropdown menu */}
+            {isUserMenuOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '0.5rem',
+                  backgroundColor: colors.surface,
+                  border: `1px solid ${colors.border}`,
+                  borderRadius: '0.5rem',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  minWidth: '200px',
+                  zIndex: 1000,
+                }}
+              >
+                {/* User email */}
+                <div style={{
+                  padding: '0.75rem 1rem',
+                  borderBottom: `1px solid ${colors.border}`,
+                  fontSize: '0.875rem',
+                  color: colors.textSecondary,
+                }}>
+                  {user?.isGuest ? "Ospite" : user.email}
+                </div>
+
+                {/* Dark Mode Toggle */}
+                <button
+                  onClick={() => {
+                    toggleDarkMode();
+                    setIsUserMenuOpen(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '0.75rem 1rem',
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: colors.textPrimary,
+                    fontSize: '0.875rem',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = colors.buttonHover;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  {isDarkMode ? "☀️ Modalità chiara" : "🌙 Modalità scura"}
+                </button>
+
+                {/* Settings */}
+                <button
+                  onClick={() => {
+                    setView("settings");
+                    setIsUserMenuOpen(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '0.75rem 1rem',
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: colors.textPrimary,
+                    fontSize: '0.875rem',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = colors.buttonHover;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  ⚙️ Impostazioni
+                </button>
+
+                {/* Logout */}
+                <button
+                  onClick={() => {
+                    onLogout();
+                    setIsUserMenuOpen(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '0.75rem 1rem',
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    borderTop: `1px solid ${colors.border}`,
+                    cursor: 'pointer',
+                    color: colors.danger,
+                    fontSize: '0.875rem',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = colors.buttonHover;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  🚪 Esci
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
