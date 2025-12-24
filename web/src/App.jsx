@@ -79,6 +79,10 @@ function App() {
     if (!isStandalone && !isDismissedRecently) {
       // Mostra banner dopo 3 secondi per dare tempo al beforeinstallprompt
       setTimeout(() => {
+        // Ri-controlla se l'app è installata (potrebbe essere cambiato nel frattempo)
+        const isCurrentlyStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        if (isCurrentlyStandalone) return; // Non mostrare se ora è installata
+
         // Se siamo su iOS Safari (non supporta beforeinstallprompt)
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
