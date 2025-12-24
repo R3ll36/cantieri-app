@@ -40,6 +40,32 @@ const icons = {
   Completato: createColoredIcon('grey'),
 };
 
+// Icona per posizione utente (blu con pulsante)
+const userLocationIcon = L.divIcon({
+  className: 'user-location-marker',
+  html: `
+    <div style="
+      width: 20px;
+      height: 20px;
+      background: #3B82F6;
+      border: 3px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+      position: relative;
+    ">
+      <div style="
+        width: 100%;
+        height: 100%;
+        background: #3B82F6;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      "></div>
+    </div>
+  `,
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
+
 /**
  * Componente per gestire click su mappa (incluso right-click)
  */
@@ -95,6 +121,8 @@ export default function MapView({
   const [selectedCantiere, setSelectedCantiere] = useState(null);
   const [tempMarker, setTempMarker] = useState(null); // Marker temporaneo per nuovo cantiere
   const [mapClickTrigger, setMapClickTrigger] = useState(0); // Trigger per chiudere ricerca
+  const [userLocation, setUserLocation] = useState(null); // Posizione utente
+  const [isLocating, setIsLocating] = useState(false); // Loading geolocation
   const mapRef = useRef(null);
 
   // Determina icona in base ad accesso camion e stato
@@ -149,6 +177,76 @@ export default function MapView({
       });
     }
   };
+
+  // Ottieni posizione utente e centra mappa
+  const handleLocateMe = () => {
+    if (!navigator.geolocation) {
+      alert('La geolocalizzazione non è supportata dal tuo browser');
+      return;
+    }
+
+    setIsLocating(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const location = { lat: latitude, lng: longitude };
+
+        setUserLocation(location);
+        setIsLocating(false);
+
+        // Centra la mappa sulla posizione utente
+        if (mapRef.current) {
+          mapRef.current.setView([latitude, longitude], 15);
+        }
+      },
+      (error) => {
+        setIsLocating(false);
+        let message = 'Impossibile ottenere la posizione';
+
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            message = 'Hai negato il permesso per la geolocalizzazione';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            message = 'Posizione non disponibile';
+            break;
+          case error.TIMEOUT:
+            message = 'Timeout richiesta geolocalizzazione';
+            break;
+        }
+
+        alert(message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 30000
+      }
+    );
+  };
+
+  // Traccia posizione utente in tempo reale
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+      },
+      (error) => {
+        console.error('Errore tracking posizione:', error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 30000
+      }
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
 
   // Previeni menu contestuale del browser sulla mappa (Windows Chrome fix)
   useEffect(() => {
@@ -317,7 +415,43 @@ export default function MapView({
             </Popup>
           </Marker>
         )}
+
+        {/* Marker posizione utente */}
+        {userLocation && (
+          <Marker
+            position={[userLocation.lat, userLocation.lng]}
+            icon={userLocationIcon}
+          >
+            <Popup>
+              <div className="p-2 text-center">
+                <p className="font-semibold text-blue-600">📍 La tua posizione</p>
+                <p className="text-xs text-gray-600 mt-1">
+                  {userLocation.lat.toFixed(6)}, {userLocation.lng.toFixed(6)}
+                </p>
+              </div>
+            </Popup>
+          </Marker>
+        )}
       </MapContainer>
+
+      {/* Bottone Locate Me */}
+      <button
+        onClick={handleLocateMe}
+        disabled={isLocating}
+        className="absolute top-20 right-4 bg-white hover:bg-gray-50 text-gray-700 p-3 rounded-full shadow-lg z-[999] transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-gray-200"
+        title="Trova la mia posizione"
+      >
+        {isLocating ? (
+          <svg className="w-6 h-6 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        ) : (
+          <svg className="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+          </svg>
+        )}
+      </button>
 
       {/* Istruzioni mappa (responsive: desktop vs mobile) - Angolo in basso a destra */}
       {onMapClick && !tempMarker && (

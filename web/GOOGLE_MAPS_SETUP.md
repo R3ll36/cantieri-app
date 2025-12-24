@@ -14,9 +14,8 @@ Per abilitare la barra di ricerca sulla mappa, devi configurare una API Key di G
 
 ### 2. Abilita le API necessarie
 
-il messaggio click destra sula mappa deve stare in basso a dx nel angolo
-quando cerco un indirizzo si apre la tendina con li indirizzi, migliora il design degli risultati e quando faccio click sulla mappa i risultati ricerca deve sparire,
-migliora i colori della mappa, devono avere i colori di Apple maps,
+Il landing page lo vedo solo su versione mobile, invece dovrei vederlo su sito intero come prima voce del menu, non mi sembra proprio professionale poi,
+se volessi aggingere la posizione di ogni utente mentre si visualizza la mappa come possiamo fare? E a pagamento? vorrei fare come su google maps, lutente puo vedere la sua posizione e mentre visita unaltro posto deve avere il pulsante target dove la mappa lo riporta sulla posizione attuale.
 
 Nel Google Cloud Console, vai su "APIs & Services" → "Library" e abilita:
 
