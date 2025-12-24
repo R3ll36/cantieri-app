@@ -175,7 +175,7 @@ export default function CantiereForm({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto max-h-[90vh] overflow-y-auto">
+    <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">
         {initialData ? 'Modifica Cantiere' : 'Nuovo Cantiere'}
       </h2>

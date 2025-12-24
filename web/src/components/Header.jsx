@@ -31,7 +31,7 @@ export default function Header({ user, onLogout, view, setView }) {
         boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
       }}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         {/* Logo */}
         <div
           className="flex items-center gap-3 cursor-pointer"
@@ -69,7 +69,6 @@ export default function Header({ user, onLogout, view, setView }) {
               cursor: "pointer",
               textDecoration: "none",
               transition: "color 0.2s",
-              borderBottom: view === "map" ? `2px solid ${colors.primary}` : "none",
               paddingBottom: "0.5rem",
             }}
             onMouseEnter={(e) => {
@@ -91,7 +90,6 @@ export default function Header({ user, onLogout, view, setView }) {
               cursor: "pointer",
               textDecoration: "none",
               transition: "color 0.2s",
-              borderBottom: view === "list" ? `2px solid ${colors.primary}` : "none",
               paddingBottom: "0.5rem",
             }}
             onMouseEnter={(e) => {
@@ -114,7 +112,6 @@ export default function Header({ user, onLogout, view, setView }) {
                 cursor: "pointer",
                 textDecoration: "none",
                 transition: "color 0.2s",
-                borderBottom: view === "add" ? `2px solid ${colors.primary}` : "none",
                 paddingBottom: "0.5rem",
               }}
               onMouseEnter={(e) => {
@@ -137,7 +134,6 @@ export default function Header({ user, onLogout, view, setView }) {
               cursor: "pointer",
               textDecoration: "none",
               transition: "color 0.2s",
-              borderBottom: view === "howItWorks" ? `2px solid ${colors.primary}` : "none",
               paddingBottom: "0.5rem",
             }}
             onMouseEnter={(e) => {
@@ -151,10 +147,10 @@ export default function Header({ user, onLogout, view, setView }) {
           </a>
 
           {/* Right section with icons */}
-          <div ref={userMenuRef} className="flex items-center gap-4 ml-4 pl-4" style={{ borderLeft: `1px solid ${colors.border}`, position: 'relative' }}>
-            {/* User icon with dropdown */}
+          <div className="flex items-center gap-4 ml-4 pl-4" style={{ borderLeft: `1px solid ${colors.border}`, position: 'relative' }}>
+            {/* Dark mode toggle */}
             <button
-              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              onClick={toggleDarkMode}
               style={{
                 backgroundColor: "transparent",
                 border: "none",
@@ -171,10 +167,35 @@ export default function Header({ user, onLogout, view, setView }) {
               onMouseLeave={(e) => {
                 e.target.style.color = colors.textSecondary;
               }}
-              title={user?.isGuest ? "Ospite" : user.email}
+              title={isDarkMode ? "Modalità chiara" : "Modalità scura"}
             >
-              👤
+              {isDarkMode ? "☀️" : "🌙"}
             </button>
+
+            {/* User icon with dropdown */}
+            <div ref={userMenuRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "0.5rem",
+                  color: colors.textSecondary,
+                  fontSize: "1.5rem",
+                  lineHeight: 1,
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.color = colors.primary;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = colors.textSecondary;
+                }}
+                title={user?.isGuest ? "Ospite" : user.email}
+              >
+                👤
+              </button>
 
             {/* User dropdown menu */}
             {isUserMenuOpen && (
@@ -201,33 +222,6 @@ export default function Header({ user, onLogout, view, setView }) {
                 }}>
                   {user?.isGuest ? "Ospite" : user.email}
                 </div>
-
-                {/* Dark Mode Toggle */}
-                <button
-                  onClick={() => {
-                    toggleDarkMode();
-                    setIsUserMenuOpen(false);
-                  }}
-                  style={{
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '0.75rem 1rem',
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: colors.textPrimary,
-                    fontSize: '0.875rem',
-                    transition: 'background-color 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = colors.buttonHover;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = 'transparent';
-                  }}
-                >
-                  {isDarkMode ? "☀️ Modalità chiara" : "🌙 Modalità scura"}
-                </button>
 
                 {/* Settings */}
                 <button
