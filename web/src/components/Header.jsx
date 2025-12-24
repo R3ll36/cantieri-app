@@ -39,22 +39,22 @@ export default function Header({ user, onLogout, view, setView }) {
         </button>
 
         {/* Desktop Navigation - hidden on mobile */}
-        <div className="hidden sm:flex items-center gap-8">
+        <div className="hidden sm:flex items-center gap-6">
           {/* Menu links testuali */}
           <a
             onClick={() => setView("map")}
             style={{
               color: view === "map" ? colors.primary : colors.textPrimary,
-              fontWeight: view === "map" ? "600" : "500",
+              fontWeight: "500",
               fontSize: "1rem",
               cursor: "pointer",
               textDecoration: "none",
               transition: "color 0.2s",
-              borderBottom: view === "map" ? `2px solid ${colors.primary}` : "2px solid transparent",
-              paddingBottom: "0.25rem",
+              borderBottom: view === "map" ? `2px solid ${colors.primary}` : "none",
+              paddingBottom: "0.5rem",
             }}
             onMouseEnter={(e) => {
-              if (view !== "map") e.target.style.color = colors.primary;
+              e.target.style.color = colors.primary;
             }}
             onMouseLeave={(e) => {
               if (view !== "map") e.target.style.color = colors.textPrimary;
@@ -67,16 +67,16 @@ export default function Header({ user, onLogout, view, setView }) {
             onClick={() => setView("list")}
             style={{
               color: view === "list" ? colors.primary : colors.textPrimary,
-              fontWeight: view === "list" ? "600" : "500",
+              fontWeight: "500",
               fontSize: "1rem",
               cursor: "pointer",
               textDecoration: "none",
               transition: "color 0.2s",
-              borderBottom: view === "list" ? `2px solid ${colors.primary}` : "2px solid transparent",
-              paddingBottom: "0.25rem",
+              borderBottom: view === "list" ? `2px solid ${colors.primary}` : "none",
+              paddingBottom: "0.5rem",
             }}
             onMouseEnter={(e) => {
-              if (view !== "list") e.target.style.color = colors.primary;
+              e.target.style.color = colors.primary;
             }}
             onMouseLeave={(e) => {
               if (view !== "list") e.target.style.color = colors.textPrimary;
@@ -90,16 +90,16 @@ export default function Header({ user, onLogout, view, setView }) {
               onClick={() => setView("add")}
               style={{
                 color: view === "add" ? colors.primary : colors.textPrimary,
-                fontWeight: view === "add" ? "600" : "500",
+                fontWeight: "500",
                 fontSize: "1rem",
                 cursor: "pointer",
                 textDecoration: "none",
                 transition: "color 0.2s",
-                borderBottom: view === "add" ? `2px solid ${colors.primary}` : "2px solid transparent",
-                paddingBottom: "0.25rem",
+                borderBottom: view === "add" ? `2px solid ${colors.primary}` : "none",
+                paddingBottom: "0.5rem",
               }}
               onMouseEnter={(e) => {
-                if (view !== "add") e.target.style.color = colors.primary;
+                e.target.style.color = colors.primary;
               }}
               onMouseLeave={(e) => {
                 if (view !== "add") e.target.style.color = colors.textPrimary;
@@ -108,6 +108,28 @@ export default function Header({ user, onLogout, view, setView }) {
               Nuovo
             </a>
           )}
+
+          <a
+            onClick={() => setView("howItWorks")}
+            style={{
+              color: view === "howItWorks" ? colors.primary : colors.textPrimary,
+              fontWeight: "500",
+              fontSize: "1rem",
+              cursor: "pointer",
+              textDecoration: "none",
+              transition: "color 0.2s",
+              borderBottom: view === "howItWorks" ? `2px solid ${colors.primary}` : "none",
+              paddingBottom: "0.5rem",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.color = colors.primary;
+            }}
+            onMouseLeave={(e) => {
+              if (view !== "howItWorks") e.target.style.color = colors.textPrimary;
+            }}
+          >
+            Aiuto
+          </a>
 
           {/* Right section with icons */}
           <div className="flex items-center gap-4 ml-4 pl-4" style={{ borderLeft: `1px solid ${colors.border}` }}>
