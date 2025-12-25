@@ -87,8 +87,8 @@ function App() {
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        if (isIOS || (isMobile && !deferredPrompt)) {
-          // Mostra banner anche senza deferredPrompt (per iOS e mobile senza supporto)
+        // Mostra banner SOLO su mobile, MAI su desktop
+        if (isMobile && (isIOS || !deferredPrompt)) {
           setShowInstallBanner(true);
         }
       }, 3000);

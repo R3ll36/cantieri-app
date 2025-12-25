@@ -282,6 +282,7 @@ export default function Header({ user, onLogout, view, setView }) {
           </div>
         </div>
       </div>
+      </div>
 
       {/* Mobile Menu - Full Screen Overlay */}
       {isMobileMenuOpen && (

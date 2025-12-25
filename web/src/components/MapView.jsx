@@ -226,6 +226,32 @@ export default function MapView({
     );
   };
 
+  // Ottieni posizione utente all'avvio e centra la mappa
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const location = { lat: latitude, lng: longitude };
+        setUserLocation(location);
+
+        // Centra la mappa sulla posizione utente al primo caricamento
+        if (mapRef.current) {
+          mapRef.current.setView([latitude, longitude], 13);
+        }
+      },
+      (error) => {
+        console.log('Posizione utente non disponibile, uso posizione default');
+      },
+      {
+        enableHighAccuracy: false, // Usa bassa accuratezza per velocità
+        timeout: 5000,
+        maximumAge: 300000 // Accetta posizioni vecchie fino a 5 minuti
+      }
+    );
+  }, []); // Solo all'avvio
+
   // Traccia posizione utente in tempo reale
   useEffect(() => {
     if (!navigator.geolocation) return;

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useTheme } from "../context/ThemeContext";
 
 const HowItWorks = () => {
+  const { colors } = useTheme();
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
@@ -255,7 +257,10 @@ const HowItWorks = () => {
       {/* Footer */}
       <footer className="py-12 px-6 bg-gray-900 text-gray-400 text-center">
         <p className="text-sm">
-          © {new Date().getFullYear()} General Beton Cantieri. Tutti i diritti riservati.
+          © {new Date().getFullYear()} Alpacem Cantieri. Tutti i diritti riservati.
+        </p>
+        <p className="text-xs mt-2 text-gray-500">
+          Gestione cantieri professionale su mappa
         </p>
       </footer>
 
