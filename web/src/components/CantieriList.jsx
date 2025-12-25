@@ -59,7 +59,7 @@ export default function CantieriList({ cantieri = [], onCantiereClick, onEdit, o
   };
 
   return (
-    <div className="max-w-4xl mx-auto" style={{
+    <div className="max-w-7xl mx-auto" style={{
       backgroundColor: colors.surface,
       borderRadius: '0.5rem',
       boxShadow: '0 10px 15px -3px rgb(0 0 0/0.1)',

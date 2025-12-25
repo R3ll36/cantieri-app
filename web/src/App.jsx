@@ -68,12 +68,26 @@ function App() {
       }
     };
 
-    // Controlla se già installata
+    // Controlla se l'app è stata installata (salvato in localStorage)
+    const appInstalled = localStorage.getItem('pwa-installed');
+
+    // Controlla se già installata o in modalità standalone
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    // Se l'app è in standalone mode, salva che è installata
+    if (isStandalone && !appInstalled) {
+      localStorage.setItem('pwa-installed', 'true');
+    }
+
     const wasDismissed = localStorage.getItem('pwa-banner-dismissed');
     const dismissedTime = wasDismissed ? parseInt(wasDismissed) : 0;
     const sevenDays = 7 * 24 * 60 * 60 * 1000;
     const isDismissedRecently = Date.now() - dismissedTime < sevenDays;
+
+    // NON mostrare banner se app è installata (anche se non in standalone mode)
+    if (appInstalled) {
+      return; // Esci early, non mostrare mai il banner se è installata
+    }
 
     // Se non è installata, non è stata dismissata di recente, e siamo su mobile, mostra il banner
     if (!isStandalone && !isDismissedRecently) {
@@ -81,7 +95,9 @@ function App() {
       setTimeout(() => {
         // Ri-controlla se l'app è installata (potrebbe essere cambiato nel frattempo)
         const isCurrentlyStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-        if (isCurrentlyStandalone) return; // Non mostrare se ora è installata
+        const stillInstalled = localStorage.getItem('pwa-installed');
+
+        if (isCurrentlyStandalone || stillInstalled) return; // Non mostrare se ora è installata
 
         // Se siamo su iOS Safari (non supporta beforeinstallprompt)
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -265,6 +281,8 @@ function App() {
 
       if (outcome === 'accepted') {
         console.log('✅ PWA installata con successo!');
+        // Salva in localStorage che l'app è stata installata
+        localStorage.setItem('pwa-installed', 'true');
       }
 
       // Resetta il prompt

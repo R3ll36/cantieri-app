@@ -267,7 +267,7 @@ export default function Settings() {
   );
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       <div style={{
         backgroundColor: colors.surface,
         borderRadius: '0.75rem',
