@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../hooks/useTheme";
 
 export default function Header({ user, onLogout, view, setView }) {
   const { colors, isDarkMode, toggleDarkMode } = useTheme();

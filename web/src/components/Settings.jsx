@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../hooks/useTheme';
 import { lightColors, darkColors } from '../config/theme';
+import { ColorPicker } from './common/ColorPicker';
 
 /**
  * Pagina Settings - Personalizza colori e font del sito
@@ -208,63 +209,12 @@ export default function Settings() {
           setHasUnsavedChanges(true);
           alert('✅ Configurazione importata! Clicca "Salva" per applicarla.');
         }
-      } catch (error) {
+      } catch {
         alert('❌ Errore nell\'importazione del file');
       }
     };
     reader.readAsText(file);
   };
-
-  const ColorPicker = ({ label, colorKey, description }) => (
-    <div style={{
-      padding: '1rem',
-      backgroundColor: colors.background,
-      borderRadius: '0.5rem',
-      border: `1px solid ${colors.border}`
-    }}>
-      <div className="flex items-center justify-between mb-2">
-        <div>
-          <label style={{ fontSize: '0.875rem', fontWeight: '600', color: colors.textPrimary }}>
-            {label}
-          </label>
-          {description && (
-            <p style={{ fontSize: '0.75rem', color: colors.textSecondary, marginTop: '0.25rem' }}>
-              {description}
-            </p>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="color"
-            value={previewColors[colorKey] || '#000000'}
-            onChange={(e) => handleColorChange(colorKey, e.target.value)}
-            style={{
-              width: '60px',
-              height: '40px',
-              border: `2px solid ${colors.border}`,
-              borderRadius: '0.5rem',
-              cursor: 'pointer'
-            }}
-          />
-          <input
-            type="text"
-            value={previewColors[colorKey] || '#000000'}
-            onChange={(e) => handleColorChange(colorKey, e.target.value)}
-            style={{
-              width: '100px',
-              padding: '0.5rem',
-              border: `1px solid ${colors.border}`,
-              borderRadius: '0.375rem',
-              backgroundColor: colors.surface,
-              color: colors.textPrimary,
-              fontSize: '0.875rem',
-              fontFamily: 'monospace'
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -502,26 +452,36 @@ export default function Settings() {
                     label="Colore Primario"
                     colorKey="primary"
                     description="Rosso principale (pulsanti attivi, accenti)"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Colore Primario Hover"
                     colorKey="primaryHover"
                     description="Rosso scuro al passaggio del mouse"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Colore Secondario"
                     colorKey="secondary"
                     description="Verde (pulsanti successo, azioni positive)"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Colore Sfondo"
                     colorKey="background"
                     description="Colore di sfondo principale"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Colore Superficie"
                     colorKey="surface"
                     description="Colore card, navbar, elementi in superficie"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                 </div>
               </div>
@@ -541,26 +501,36 @@ export default function Settings() {
                     label="Sfondo Navbar"
                     colorKey="navbarBg"
                     description="Colore di sfondo della barra di navigazione"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Pulsante Attivo - Sfondo"
                     colorKey="buttonActiveBg"
                     description="Sfondo pulsante navbar quando attivo"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Pulsante Attivo - Testo"
                     colorKey="buttonActiveText"
                     description="Colore testo pulsante navbar quando attivo"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Pulsante Inattivo - Sfondo"
                     colorKey="buttonInactiveBg"
                     description="Sfondo pulsante navbar quando non attivo"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Pulsante Inattivo - Testo"
                     colorKey="buttonInactiveText"
                     description="Colore testo pulsante navbar quando non attivo"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                 </div>
               </div>
@@ -580,16 +550,22 @@ export default function Settings() {
                     label="Testo Primario"
                     colorKey="textPrimary"
                     description="Colore principale del testo"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Testo Secondario"
                     colorKey="textSecondary"
                     description="Colore testo secondario (descrizioni, label)"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Bordi"
                     colorKey="border"
                     description="Colore dei bordi e divisori"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                 </div>
               </div>
@@ -609,21 +585,29 @@ export default function Settings() {
                     label="Successo"
                     colorKey="success"
                     description="Pulsanti di conferma e azioni positive"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Pericolo"
                     colorKey="danger"
                     description="Pulsanti di eliminazione e azioni critiche"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Info"
                     colorKey="info"
                     description="Pulsanti informativi e link"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                   <ColorPicker
                     label="Warning"
                     colorKey="warning"
                     description="Avvisi e notifiche di attenzione"
+                    previewColors={previewColors}
+                    handleColorChange={handleColorChange}
                   />
                 </div>
               </div>
