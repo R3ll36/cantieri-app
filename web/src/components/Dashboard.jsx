@@ -1,4 +1,5 @@
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../hooks/useTheme';
+import { StatCard } from './common/StatCard';
 
 /**
  * Dashboard con statistiche cantieri
@@ -27,30 +28,6 @@ export default function Dashboard({ cantieri }) {
   const ultimiCantieri = [...cantieri]
     .sort((a, b) => (b.created_at?.seconds || 0) - (a.created_at?.seconds || 0))
     .slice(0, 5);
-
-  const StatCard = ({ title, value, icon, colorClass, bgClass }) => (
-    <div style={{
-      backgroundColor: colors.surface,
-      border: `1px solid ${colors.border}`,
-      borderRadius: '0.75rem',
-      padding: '1.5rem',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-    }}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p style={{ fontSize: '0.875rem', color: colors.textSecondary, marginBottom: '0.5rem' }}>
-            {title}
-          </p>
-          <p style={{ fontSize: '2rem', fontWeight: 'bold', color: colors.textPrimary }}>
-            {value}
-          </p>
-        </div>
-        <div className={`${bgClass} ${colorClass} w-16 h-16 rounded-full flex items-center justify-center text-3xl`}>
-          {icon}
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-6">

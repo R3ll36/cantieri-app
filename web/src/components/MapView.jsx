@@ -70,7 +70,7 @@ const userLocationIcon = L.divIcon({
  * Componente per gestire click su mappa (incluso right-click)
  */
 function MapClickHandler({ onMapClick, onRightClick, onAnyClick }) {
-  const map = useMapEvents({
+  useMapEvents({
     click(e) {
       // Notifica click generico (per chiudere ricerca)
       if (onAnyClick) {
@@ -118,7 +118,6 @@ export default function MapView({
   center = { lat: 46.0569, lng: 13.2348 }, // Udine, Italia
   zoom = 10,
 }) {
-  const [selectedCantiere, setSelectedCantiere] = useState(null);
   const [tempMarker, setTempMarker] = useState(null); // Marker temporaneo per nuovo cantiere
   const [mapClickTrigger, setMapClickTrigger] = useState(0); // Trigger per chiudere ricerca
   const [userLocation, setUserLocation] = useState(null); // Posizione utente
@@ -134,7 +133,6 @@ export default function MapView({
   };
 
   const handleMarkerClick = (cantiere) => {
-    setSelectedCantiere(cantiere);
     if (onCantiereClick) {
       onCantiereClick(cantiere);
     }
@@ -241,7 +239,7 @@ export default function MapView({
           mapRef.current.setView([latitude, longitude], 13);
         }
       },
-      (error) => {
+      () => {
         console.log('Posizione utente non disponibile, uso posizione default');
       },
       {

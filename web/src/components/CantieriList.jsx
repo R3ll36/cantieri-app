@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { generateGoogleMapsLink, openGoogleMapsDirections } from '../utils/mapsLinkParser';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../hooks/useTheme';
 
 /**
  * Lista cantieri con filtri e ricerca

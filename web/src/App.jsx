@@ -9,7 +9,7 @@ import Header from './components/Header';
 import Settings from './components/Settings';
 import HowItWorks from './components/HowItWorks';
 import IOSInstallPrompt from './components/IOSInstallPrompt';
-import { useTheme } from './context/ThemeContext';
+import { useTheme } from './hooks/useTheme';
 import { initDeepLinking } from './utils/deepLinking';
 
 function App() {

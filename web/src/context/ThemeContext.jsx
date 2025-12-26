@@ -1,8 +1,7 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { lightColors, darkColors } from '../config/theme';
 import { subscribeToGlobalSettings, saveGlobalSettings } from '../firebase/globalSettings';
-
-const ThemeContext = createContext();
+import { ThemeContext } from './ThemeContextDef';
 
 export function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -114,12 +113,4 @@ export function ThemeProvider({ children }) {
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
-  }
-  return context;
 }

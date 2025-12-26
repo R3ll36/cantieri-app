@@ -12,8 +12,11 @@ export default function MapSearchBar({ onLocationSelect, onMapClick }) {
 
   // Chiudi risultati quando si clicca sulla mappa
   useEffect(() => {
-    if (onMapClick) {
-      setPredictions([]);
+    if (onMapClick > 0) {
+      const timer = setTimeout(() => {
+        setPredictions([]);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [onMapClick]);
 
